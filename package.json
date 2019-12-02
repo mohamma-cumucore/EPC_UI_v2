@@ -1,0 +1,38 @@
+{
+  "name": "epcgui_v2.0",
+  "version": "2.0.0",
+  "description": "GUI for the Cumucore EPC installation",
+  "bin": "app.js",
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.3.0",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "method-override": "^3.0.0",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "mysql": "^2.17.1",
+    "nodemon": "^2.0.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "request": "^2.88.0",
+    "serve-favicon": "^2.5.0"
+  },
+  "pkg": {
+    "scripts": "public/**/*.js",
+    "assets": "views/**/*"
+  },
+  "devDependencies": {},
+  "author": "Abdulkadir Mohammedadem",
+  "license": "ISC"
+}

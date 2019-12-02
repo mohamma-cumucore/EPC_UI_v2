@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <%- include ('../partials/head');%>
+    <body>
+        <%if(message.info){%>
+            <div>
+                <p class="alert alert-success" role="alert"><small><%=message.info%></small></p>
+            </div>
+            <%}%>
+
+            <table class="table" id="table1">
+                <thead class="Thead">
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">S1 ADDRESS</th>
+                    <th scope="col">MCC</th>
+                    <th scope="col">MNC</th>
+                    <th scope="col">S11 ADDRESS</th>
+                    <th scope="col">S10 ADDRESS</th>
+                    <th scope="col">S10 REMOTE ADDRESS</th>
+                    <th scope="col">S11U ADDRESS</th>
+                    <th scope="col">M3 ADDRESS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% if(amfd.length){
+                  for(var i=0; i<amfd.length;i++){
+                    var id=amfd[i].name;
+                    %>
+                    <tr>
+                    <td><input type="checkbox" value="<%=amfd[i].name%>" onclick="onchangevalue();"></td>
+                    <td><%=id%></td>
+                    <td><%=amfd[i].s1_addr_ipv4%></td>
+                    <td><%=amfd[i].mcc%></td>
+                    <td><%=amfd[i].mnc%></td>
+                    <td><%=amfd[i].s11_addr_ipv4%></td>
+                    <td><%=amfd[i].s10_addr_ipv4%></td>
+                    <td><%=amfd[i].s10_rem_addr_ipv4%></td>
+                    <td><%=amfd[i].s11u_addr_ipv4%></td>
+                    <td><%=amfd[i].m3_addr_ipv4%></td>
+      
+                    <%if(amfd[i].amf_state==0){%>
+                      <td>
+              <a href="/startamf/<%= id %>"><button type="button" class="btn btn-primary">start</button></a></td>
+      
+      
+      
+                    <%} else if(amfd[i].amf_state==1){%>
+                      <td>
+              <a href="/startamf/<%=id%>"<button type="button" class="btn btn-danger">stop</button></a></td>
+      
+                  <%  } else {%>
+                    <td>
+            <a href="/startamf/<%= id %>"<button type="button" class="btn btn-success">running</button></a></td>
+                  <%}%>
+                  </tr>
+      
+              <%    }
+                } %>
+                            </tbody>
+                          </table>
+
+
+                          <script type="text/javascript">
+                            function selected_value(){
+                              var httpdel = "/del_amf/";
+                              var table= document.getElementById("table1").tBodies[0];
+                              var rowcount = table.rows.length;
+                              console.log(rowcount);
+                              for(var i=0; i<rowcount;i++){
+                                var row = table.rows[i];
+                                var chkbox = row.cells[0].getElementsByTagName("input")[0];
+                                if(chkbox.checked==true){
+                                  var amfname = document.getElementById("table1").rows[i+1].cells[1].innerHTML;
+                                  var http = "/edit_amf/"+amfname;
+                                  var httpdel= httpdel+amfname+',';
+                                  var jsonlink = "/downloadconfig/"+amfname;
+                                  document.getElementById("editlink").setAttribute("href",http);
+                                  document.getElementById("delink").setAttribute("href",httpdel);
+                                  document.getElementById("jsonconfig").setAttribute("href",jsonlink);
+                                }
+                              }
+                
+                            }
+                
+                            function onchangevalue(){
+                              console.log('onchange values!!');
+                              var table1 = document.getElementById("table1").tBodies[0];
+                              var rowcount1 = table1.rows.length;
+                              for(var j=0; j<rowcount1; j++){
+                               var row = table1.rows[j];
+                               var checkbox= row.cells[0].getElementsByTagName("input")[0];
+                               if(checkbox.checked==true){
+                                     document.getElementById("table1").rows[j+1].style.color="green";
+                               }
+                               else{
+                                 document.getElementById("table1").rows[j+1].style.color="black";
+                               }
+                              }
+                            }
+                            </script>
+    </body>
+</html>

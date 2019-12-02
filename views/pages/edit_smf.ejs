@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+
+<%- include ('../partials/head') %>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <div class="container-fluid ">
+    <div class="row subscriber-bg">
+      <%- include ('../partials/editsidemenue') %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5" id="mainbar">
+        <div class="row">
+          <div class="col-md-6">
+            <%if(error){%>
+            <div>
+              <% for(err in error){ %>
+              <p class="alert alert-danger" role="alert"><small><%=error[err].msg%></small></p>
+              <%}%>
+            </div>
+                <%}%>
+              <%if(message){%>
+              <div>
+                <p class="alert alert-danger" role="alert"><small><%=message%></small></p>
+              </div>
+              <%}%>
+                  <div class="topboxamf">EDIT SMF CONFIGURATION</div>
+
+        <div id="accordion">
+            <form method="POST" action="/edit_smf/<%=smfdata.name%>">
+              <div class="card">
+                <div class="card-header">
+                  <a class="card-link" data-toggle="collapse" aria-expanded="false"
+                    href="#basic"><strong>4G/5G</strong></a>
+                </div>
+                <div id="basic" class="collapse" data-parent="#accordion">
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="addgapamf"><label for="validationDefault01">STORAGE PATH</label></div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault01" value="/home/ubuntu/"
+                          name="config_path" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf"><label for="validationDefault01">NAME</label></div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault01" value="<%=smfdata.name%>"
+                          name="name" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault01">S11 ADDRESS(v4)</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="s1value" value="<%=smfdata.s11_addr_ipv4%>"
+                          name="s11_addr_ipv4" onmousemove="ds11();" onmouseout="clears11();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault01">S11 ADDRESS(v6)</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="s1value" value="<%=smfdata.s11_addr_ipv6%>"
+                          name="s11_addr_ipv6">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">AMF S11 ADDRESS(v4)</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.amf_s11_addr_ipv4%>" name="amf_s11_addr_ipv4" onmousemove="damfs11();"
+                          onmouseout="clearamfs11();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">AMF S11 ADDRESS(v6)</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.amf_s11_addr_ipv6%>" name="amf_s11_addr_ipv6">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">UPF S5 ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.upf_s5_addr_ipv4%>" name="upf_s5_addr_ipv4" onmousemove="dUpfs5();"
+                          onmouseout="clearUpfs5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">UPF S5 PORT</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.upf_s5_port%>" name="upf_s5_port" onmousemove="dUpfs5();"
+                          onmouseout="clearUpfs5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">S5 ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.s5_addr_ipv4%>" name="s5_addr_ipv4" onmousemove="ds5();"
+                          onmouseout="clears5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">S5 PORT</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03" value="<%=smfdata.s5_port%>"
+                          name="s5_port" onmousemove="ds5();" onmouseout="clears5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">S1U UPLINK ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.s1u_uplink_addr_ipv4%>" name="s1u_uplink_addr_ipv4" onmousemove="ds1u();"
+                          onmouseout="clears1u();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">UE ADDRESS POOL START</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.ue_addr_ipv4_pool_start%>" name="ue_addr_ipv4_pool_start" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">DNS ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.dns_addr_ipv4%>" name="dns_addr_ipv4" onmousemove="ds10();"
+                          onmouseout="clears10();" required>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#embms"
+                    onmousemove="neighbourAMF();" onmouseout="clearNeighbour();"><strong>eMBMS</strong></a>
+                </div>
+                <div id="embms" class="collapse" dataparent="#accordion">
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">SGMB ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.sgmb_addr_ipv4%>" name="sgmb_addr_ipv4" onmousemove="dsgsmf();"
+                          onmouseout="clearsgsmf();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">SGMB PORT</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03" value="<%=smfdata.sgmb_port%>"
+                          name="sgmb_port" onmousemove="dsgsmf();" onmouseout="clearsgsmf();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">SM ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.sm_addr_ipv4%>" name="sm_addr_ipv4" onmousemove="dsm();"
+                          onmouseout="clearsm();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">AMF SM ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.amf_sm_addr_ipv4%>" name="amf_sm_addr_ipv4" onmousemove="damfSM();"
+                          onmouseout="clearamfsSM();" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#database"
+                    onmousemove="databaseconfig();" onmouseout="clearDB();"><strong>DATABASE</strong></a>
+                </div>
+                <div id="database" class="collapse" dataparent="#accordion">
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">MySQL HOST</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03" value="<%=smfdata.mysql_host%>"
+                          name="mysql_host" onmousemove="databaseconfig();" onmouseout="clearDB();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">DATABASE NAME</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.mysql_db_name%>" name="mysql_db_name" onmousemove="databaseconfig();"
+                          onmouseout="clearDB();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">MySQL USER NAME</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.mysql_user_name%>" name="mysql_user_name" onmousemove="databaseconfig();"
+                          onmouseout="clearDB();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">MySQL PASSWORD</label>
+                      </div>
+                      <div class="col">
+                        <input type="password" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.mysql_password%>" name="mysql_password" onmousemove="databaseconfig();"
+                          onmouseout="clearDB();" required>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#nb-iot"
+                    onmousemove="narrowbandIOT();" onmouseout="clearnbiot();"><strong>NB-IOT</strong></a>
+                </div>
+                <div id="nb-iot" class="collapse" dataparent="#accordion">
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">IOT UPF USER PLANE ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.iot_upf_user_plane_addr_ipv4%>" name="iot_upf_user_plane_addr_ipv4"
+                          onmousemove="diotUPF();" onmouseout="cleariotUPF();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">IOT UPF S5 ADDRESS</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.iot_upf_s5_addr_ipv4%>" name="iot_upf_s5_addr_ipv4" onmousemove="diotS5();"
+                          onmouseout="cleariotS5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">IOT UPF S5 PORT</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.iot_upf_s5_port%>" name="iot_upf_s5_port" onmousemove="diotS5();"
+                          onmouseout="cleariotS5();" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="addgapamf">
+                        <label for="validationDefault03">IOT UPF APN</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" id="validationDefault03"
+                          value="<%=smfdata.iot_upf_apn%>" name="iot_upf_apn" onmousemove="ds11u();"
+                          onmouseout="clears11u();" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-md">
+                  <button class="btn mt-4 mr-3 mb-4 blbutt" type="submit">Submit</button>
+                  <a href="/smfdisplay"><button type="button" class="btn mt-4 mb-4 delbutt">Cancel</button></a>
+                </div>
+              </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <canvas style="background-image:url('../images/smfdesign.png')" id="canvas" width="452"
+              height="313"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+
+      function ds1u() {
+        drawsmf(177, 20, "S1u");
+      }
+      function clears1u() {
+        clearCanvas(177, 20);
+      }
+      function databaseconfig() {
+        drawrect(351, 92);
+      }
+      function clearDB() {
+        clearRectangle(352, 94);
+      }
+      function narrowbandIOT() {
+        drawrect(0, 278);
+      }
+      function clearnbiot() {
+        clearRectangle(0, 282);
+      }
+      function ds5() {
+        drawsmf(225, 88, "S5");
+      }
+      function clears5() {
+        clearCanvas(225, 88);
+      }
+      function dUpfs5() {
+        drawsmf(225, 43, "S5");
+      }
+      function clearUpfs5() {
+        clearCanvas(225, 43);
+      }
+      function diotUPF() {
+        drawsmf(43, 277, "UP");
+      }
+      function cleariotUPF() {
+        clearCanvas(43, 277);
+      }
+      function diotS5() {
+        drawsmf(97, 276, "S5");
+      }
+      function cleariotS5() {
+        clearCanvas(97, 276);
+      }
+      function ds11() {
+        drawsmf(180, 142, "S11");
+      }
+      function clears11() {
+        clearCanvas(180, 142);
+      }
+      function damfs11() {
+        drawsmf(100, 144, "S11");
+      }
+      function clearamfs11() {
+        clearCanvas(100, 144);
+      }
+      function damfSM() {
+        drawsmf(99, 197, "Sm");
+      }
+      function clearamfsSM() {
+        clearCanvas(99, 197);
+      }
+      function dsgsmf() {
+        drawsgsmf(208, 216, "SGmb ");
+      };
+      function clearsgsmf() {
+        clearSgsmf(208, 217);
+      }
+
+
+      function drawsmf(x, y, text) {
+        var canvas = document.getElementById("canvas");
+        if (canvas.getContext) {
+          var ctx = canvas.getContext('2d');
+          // var img = new Image();
+          // img.src = smfimg;
+          // img.onload = function(){
+          //   ctx.imageSmoothingEnabled = false;
+          //   ctx.drawImage(img,x,y);
+          // }
+          ctx.beginPath();
+          ctx.arc(x, y, 15, 2 * Math.PI, false);
+          ctx.fillStyle = "#68A544";
+          ctx.fill();
+          ctx.textAlign = "center";
+          ctx.fillStyle = "white";
+          ctx.fillText(text, x, y + 2);
+        }
+      }
+      function drawsgsmf(x, y, text) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.fillStyle = "#68A544";
+        ctx.fillRect(x, y, 44, 25);
+        ctx.textAlign = "center";
+        ctx.fillStyle = "white";
+        ctx.fillText(text, x + 20, y + 15);
+      }
+      function clearCanvas(x, y) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(x - 15, y - 15, 30, 30);
+      }
+      function clearSgsmf(x, y) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(x - 5, y - 15, 50, 50);
+      }
+      function drawrect(x, y) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        //ctx.fillStyle="#68A544";
+        ctx.strokeStyle = "#68A544"
+        ctx.strokeRect(x, y, 100, 35);
+      }
+      function clearRectangle(x, y) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(x - 5, y - 15, 110, 50);
+      }
+    </script>
+</body>
+
+</html>

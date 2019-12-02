@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+
+<%- include ('../partials/head') %>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <div class="container-fluid">
+    <div class="row subscriber-bg">
+      <%- include ('../partials/sidemenu') %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5" id="mainbar">
+        <div class="row">
+          <div class="col-md-6">
+            <%if(error){%>
+            <div>              
+              <p class="alert alert-danger" role="alert"><small><%=error%></small></p>             
+            </div>
+                <%}%>
+              <%if(message){%>
+              <div>
+                <p class="alert alert-danger" role="alert"><small><%=message%></small></p>
+              </div>
+              <%}%>
+                  <div class="topboxamf">ADD NEW AMF</div>
+
+        <div id="accordion">
+            <form method="POST" action="/amfadd">
+          <div class="card">
+            <div class="card-header">
+              <a class="card-link" data-toggle="collapse" aria-expanded="false" href="#basic"><strong>4G</strong></a>
+            </div>
+            <div id="basic" class="collapse" data-parent="#accordion">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="addgapamf"><label for="validationDefault01">STORAGE PATH</label></div>
+                  <div class="col">
+                    <input type="text" class="form-control" id="validationDefault01" value="/home/ubuntu/" name="config_path" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="addgapamf"><label for="validationDefault01">NAME</label></div>
+                  <div class="col">
+                    <input type="text" class="form-control" id="validationDefault01" value="<%=amf.name%>" name="name"
+              required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault01">S1 ADDRESS(v4)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="s1value" value="<%=amf.s1_addr_ipv4%>" name="s1_addr_ipv4"
+                onmousemove="ds1();" onmouseout="clears1();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault01">S1 ADDRESS(v6)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="s1value" value="<%=amf.s1_addr_ipv6%>" name="s1_addr_ipv6"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">SMF S11 ADDRESS(v4)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.smf_s11_addr_ipv4%>"
+                name="smf_s11_addr_ipv4" onmousemove="dsmfs11();" onmouseout="clearsmfs11();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">SMF S11 ADDRESS(v6)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.smf_s11_addr_ipv6%>"
+                name="smf_s11_addr_ipv6" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S11 ADDRESS(v4)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s11_addr_ipv4%>"
+                name="s11_addr_ipv4" onmousemove="ds11();" onmouseout="clears11();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S11 ADDRESS(v6)</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s11_addr_ipv6%>"
+                name="s11_addr_ipv6" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MMEC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.mmec%>" name="mmec"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MMEGI</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.mmegi%>" name="mmegi"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MCC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.mcc%>" name="mcc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MNC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.mnc%>" name="mnc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_addr_ipv4%>"
+                name="s10_addr_ipv4" onmousemove="ds10();" onmouseout="clears10();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">TRACKING AREA LIST 1:</label>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" value="<%=amf.tracking_area_list%>"
+                  name="tracking_area_list1a" required>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list1b">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list1c">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list1d">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list1e">
+              </div>
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">TRACKING AREA LIST 2:</label>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list2a">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list2b">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list2c">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list2d">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list2e">
+              </div>
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">TRACKING AREA LIST 3:</label>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list3a">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list3b">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list3c">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list3d">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="validationDefault03" placeholder="NULL"
+                  name="tracking_area_list3e">
+              </div>
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">PERIODIC TIMER</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.periodic_tau_timer%>"
+                name="periodic_tau_timer" required>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#s10remote"
+          onmousemove="neighbourAMF();" onmouseout="clearNeighbour();"><strong>NEIGHBOUR AMF</strong></a>
+      </div>
+      <div id="s10remote" class="collapse" dataparent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 MCC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_mcc%>" name="s10_mcc"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 MNC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_mnc%>" name="s10_mnc"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 MMEC:</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_mmec%>" name="s10_mmec"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 MMEGI:</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_mmegi%>"
+                name="s10_mmegi" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S10 REMOTE ADDRESS:</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s10_rem_addr_ipv4%>"
+                name="s10_rem_addr_ipv4" onmousemove="ds10neigh();" onmouseout="clears10neigh();" required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#database"
+          onmousemove="databaseconfig();" onmouseout="clearDB();"><strong>DATABASE</strong></a>
+      </div>
+      <div id="database" class="collapse" dataparent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MySQL HOST</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="localhost" name="mysql_host"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">DATABASE NAME</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="hss_lte_db" name="mysql_db_name"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MySQL USER NAME</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="hss" name="mysql_user_name"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MySQL PASSWORD</label>
+            </div>
+            <div class="col">
+              <input type="password" class="form-control" id="validationDefault03" value="hss" name="mysql_password"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">DIAMETER CONFIG FILE PATH</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="/home/freeDiameter.conf"
+                name="diam_config_file_path" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">dIAMETER HSS HOSTNAME</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="peer1.localdomain"
+                name="diam_hss_host_name" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">dIAMETER HSS REALM</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="localdomain" name="diam_hss_realm"
+                required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#authServer"
+          onmousemove="authentication();" onmouseout="clearAuthentication();"><strong>AUTHENTICATION SERVER</strong></a>
+      </div>
+      <div id="authServer" class="collapse" dataparent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">AUTHENTICATION DATA PATH:</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="/home/ubuntu/AMF/"
+                name="auth_data_path" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">AUHTENTICATION SERVER IP:</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="195.148.125.44" name="auth_srv_ip"
+                onmousemove="dAu();" onmouseout="clearAu();" required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#nb-iot"
+          onmousemove="narrowbandIOT();" onmouseout="clearnbiot();"><strong>NB-IOT</strong></a>
+      </div>
+      <div id="nb-iot" class="collapse" dataparent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">S11U ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.s11u_addr_ipv4%>"
+                name="s11u_addr_ipv4" onmousemove="ds11u();" onmouseout="clears11u();" required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false" href="#mbms"
+          onmousemove="bmscEmbms();" onmouseout="clearEmbms();"><strong>eMBMS</strong></a>
+      </div>
+      <div id="mbms" class="collapse" data-parent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">M3 ADDRESS(v4)</label>
+            </div>
+            <div class="col"><input type="text" class="form-control" id="validationDefault03"
+                value="<%=amf.m3_addr_ipv4%>" name="m3_addr_ipv4" onmousemove="dm3();" onmouseout="clearm3();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">M3 ADDRESS(v6)</label>
+            </div>
+            <div class="col"><input type="text" class="form-control" id="validationDefault03"
+                value="<%=amf.m3_addr_ipv6%>" name="m3_addr_ipv6" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">SM ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.sm_addr_ipv4%>"
+                name="sm_addr_ipv4" onmousemove="dsm();" onmouseout="clearsm();" required>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <a class="collapsed card-link" data-toggle="collapse" aria-expanded="false"
+          href="#fivegc"><strong>5GC</strong></a>
+      </div>
+      <div id="fivegc" class="collapse" data-parent="#accordion">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">NG. ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="127.0.0.1" name="ng_addr_ipv4"
+                onmousemove="ds1();" onmouseout="clears1();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">SMF N11 ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="127.0.0.1"
+                name="smf_n11_addr_ipv4" onmousemove="dsmfs11();" onmouseout="clearsmfs11();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">N11 ADDRESS</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="127.0.0.6" name="n11_addr_ipv4"
+                onmousemove="ds11();" onmouseout="clears11();" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MCC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="244" name="mcc_5g" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">MNC</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="44" name="mnc_5g" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">AMF REGION ID</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="1" name="amf_region_id" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">AMF SET ID</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="1" name="amf_set_id" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">AMF POINTER</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="2" name="amf_pointer" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">PERIODIC TAU TIMER</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="10" name="periodic_tau_timer_5g"
+                required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="addgapamf">
+              <label for="validationDefault03">TRACKING AREA LIST :</label>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault03" value="<%=amf.tracking_area_list%>"
+                name="tracking_area_list" required>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="btn-group btn-group-md">
+        <button class="btn mt-4 mr-3 mb-4 blbutt" type="submit">Submit</button>
+        <a href="/amfdisplay"><button type="button" class="btn mt-4 mb-4 delbutt">Cancel</button></a>
+      </div>
+    </div>
+    </form>
+  </div>
+  </div>
+  <div class="col-md-6">
+    <canvas style="background-image:url('../images/amfdesign.png')" id="canvas" width="452" height="318"></canvas>
+  </div>
+  </div>
+
+  </div>
+  </div>
+  </div>
+  <script type="text/javascript">
+
+    function dsm() {
+      draw(176, 199, "Sm");
+    }
+    function clearsm() {
+      clearCanvas(176, 199);
+    }
+    function neighbourAMF() {
+      drawrect(350, 10);
+    }
+    function clearNeighbour() {
+      clearRectangle(350, 11);
+    }
+    function narrowbandIOT() {
+      drawrect(351, 281);
+    }
+    function clearnbiot() {
+      clearRectangle(350, 282);
+    }
+    function bmscEmbms() {
+      drawrect(0, 281);
+    }
+    function clearEmbms() {
+      clearRectangle(0, 282);
+    }
+    function authentication() {
+      drawrect(350, 178);
+    }
+    function clearAuthentication() {
+      clearRectangle(350, 179);
+    }
+    function dAu() {
+      draw(349, 195, "Au");
+    }
+    function clearAu() {
+      clearCanvas(349, 195);
+    }
+    function databaseconfig() {
+      drawrect(350, 95);
+    }
+    function clearDB() {
+      clearRectangle(350, 96);
+    }
+    function ds1() {
+      //bgimage();
+      draw(245, 90, "S1");
+    }
+    function clears1() {
+      clearCanvas(245, 90);
+    }
+    function ds11() {
+      draw(178, 144, "S11");
+    }
+    function clears11() {
+      clearCanvas(178, 144);
+    }
+    function dsmfs11() {
+      draw(100, 144, "S11");
+    }
+    function clearsmfs11() {
+      clearCanvas(100, 144);
+    }
+    function ds10neigh() {
+      draw(349, 29, "S10");
+    }
+    function clears10neigh() {
+      clearCanvas(349, 29);
+    }
+    function ds10() {
+      draw(276, 90, "S10");
+    }
+    function clears10() {
+      clearCanvas(276, 90);
+    }
+    function dm3() {
+      draw(199, 87, "M3");
+    }
+    function clearm3() {
+      clearCanvas(199, 87);
+    }
+    function ds11u() {
+      draw(276, 224, "S11u");
+    }
+    function clears11u() {
+      clearCanvas(276, 224);
+    }
+    //draw(authserv,180,65);
+    function draw(x, y, text) {
+      var canvas = document.getElementById('canvas');
+      if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 2 * Math.PI, false);
+        ctx.fillStyle = "#68A544";
+        ctx.fill();
+        ctx.textAlign = "center";
+        ctx.fillStyle = "white";
+        ctx.fillText(text, x, y + 2);
+      }
+    }
+    function clearCanvas(x, y) {
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(x - 15, y - 15, 30, 30);
+    }
+    function drawrect(x, y) {
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      //ctx.fillStyle="#68A544";
+      ctx.strokeStyle = "#68A544"
+      ctx.strokeRect(x, y, 100, 35);
+    }
+    function clearRectangle(x, y) {
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(x - 5, y - 15, 110, 50);
+    }
+  </script>
+</body>
+
+</html>

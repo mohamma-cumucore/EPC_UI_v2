@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%- include ('../partials/head'); %>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <div class="container-fluid">
+
+    <div class="row subscriber-bg">
+          <%- include ('../partials/editsidemenue'); %>
+          <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+          <p class="topbox">Modify eNB  configuration</p>
+          <div class="row">
+            <div class="col-md-9">
+              <%if(error){%>
+                  <ul>
+                  <% for(err in error){ %>
+                    <li class="text-danger"><small><%=error[err].msg%></small></li>
+                  <%}%>
+                </ul>
+                <%}%>
+
+              <form method="post" action="/modifyconfig/<%=data.ip%>">
+          <div class="form-row">
+              <div class="col-2"><label for="validationDefault01">*eNBname:</label></div>
+            <div class="col">
+              <input type="text" class="form-control" id="enbname" value="<%=data.name%>" name="eNBname">
+          </div>
+        </div>
+          <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*IP:</label></div>
+            <div class="col">
+              <input type="text" class="form-control" id="ip" value="<%=data.ip%>" name="eNBIP">
+        </div>
+      </div>
+        <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*Latitude:</label></div>
+            <div class="col">
+            <input type="text" class="form-control" id="latitude" value="<%=data.latitude%>" name="gps_coorlat">
+          </div>
+        </div>
+        <div class="form-row">
+
+            <div class="col-2"><label for="validationDefault01">*Longitude:</label></div>
+            <div class="col"><input type="text" class="form-control" id="longitude" value="<%=data.longitude%>" name="gps_coorlng">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*coverage Area:</label></div>
+            <div class="col"><input type="text" class="form-control" id="coverage" value="<%=data.coverage_area%>" name="coverageA">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*cell Id:</label></div>
+            <div class="col"><input type="text" class="form-control" id="cellid" value="<%=data.cell_id%>" name="cellID">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*Tracking area Id:</label></div>
+            <div class="col"><input type="text" class="form-control" id="trackarea" value="<%=data.tracking_area_id%>" name="trackingA_ID">
+          </div>
+        </div>
+
+          <div class="form-row">
+            <div class="col-2"><label for="validationDefault01">*service Id:</label></div>
+            <div class="col"><input type="text" class="form-control" id="serviceid" value="<%=data.service_id%>" name="service_ID">
+          </div>
+        </div>
+        <div class="row">
+            <div class="btn-group btn-group-md">
+              <button class="btn blbutt mb-2 mr-3 mt-5" type="submit">Submit</button>
+              <a href="/viewconfig"><button type="button" class="btn delbutt mb-2 mt-5">Cancel</button></a>
+            </div>
+
+        </div>
+      </form>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+        </div>
+    </div>
+        </div>
+  </body>
+</html>

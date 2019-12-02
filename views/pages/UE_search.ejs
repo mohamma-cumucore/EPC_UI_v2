@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<%- include ('../partials/head');%>
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <div class="container-fluid">
+
+  <div class="row subscriber-bg">
+    <%- include ('../partials/sidemenu');%>
+  <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 subscriber-bg">
+  <div class="bg-block">
+    <%if(message.error){%>
+        <div class="alert alert-danger" role="alert"><%-message.error%></div>
+      <%}%>
+<p class="topbox text-center"> Search Subscriber</br></p>
+<h6>(with IMSI, e.g., 244441000000001)</h6>
+<div class="row">
+<div class="col-md-3 mb-3"></div>
+<div class="col-md-6 mb-3">
+  <form  method="post" action="/UE_search">
+    <input class="form-control form-control-bg mb-2"type="text"placeholder="imsi number"name="imsi"/>
+  <button  type="submit"class="btn blbutt">Search</button>
+  </form>
+</div>
+<div class="col-md-3 mb-3"></div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

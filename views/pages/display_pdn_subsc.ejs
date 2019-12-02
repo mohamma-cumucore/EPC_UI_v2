@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang=”en”>
+
+<%- include ('../partials/head'); %>
+<body>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <div class="container-fluid">
+
+    <div class="row subscriber-bg">
+        <%- include ('../partials/sidemenu'); %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+      <%if(message.error){%>
+          <div class="alert alert-danger" role="alert"><%-message.error%></div>
+        <%}%>
+        <%if(message.info){%>
+          <div class="alert alert-success" role="alert"><%-message.info%></div>
+          <%}%>
+      <div class="topbox ml-5">Subscriber Information</div>
+      <div class="table-responsive">
+        <table class="table" id="table1">
+          <thead class="Thead">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">IMSI</th>              
+              <th scope="col">MSISDN</th>
+              <th scope="col">APN</th>
+              <th scope="col">QCI</th>
+              <th scope="col">K</th>
+              <th scope="col">IPv4</th>
+            </tr>
+          </thead>
+         <tbody>
+          <% if(data.length){
+            for(var i=0; i<data.length;i++){              
+              var k= data[i].k.toString('HEX');
+              var msisdn = data[i].msisdn;              
+              if(data[i].served_party_ipv4_addr==''){
+                data[i].served_party_ipv4_addr='NULL';
+              }
+              %>
+              <tr>
+                <td><input type="checkbox" onclick="onchangevalue();"></td>
+                <td><%=data[i].imsi%></td>                
+                <td><%=msisdn%></td>
+                <td><%=data[i].apn%></td>
+                <td><%=data[i].qci%></td>
+                <td><%=k%></td>
+               <td><%=data[i].served_party_ipv4_addr%></td>
+              </tr>
+
+              <% }
+            } %>
+        </tbody>
+                    </table>
+                  </div>
+                <a id="editlink"><button type="button" class="btn mt-5 mr-2 ml-5 blbutt" onclick="selected_value();">Edit</button></a>
+                <!-- <input type="button" class="btn mt-5 mr-2 ml-5 blbutt" value="Edit" onclick="windows.location.href='/edit_pdn_subs/selected_value()'"/> -->
+                <a id="delink"><button type="button" class="btn mt-5 delbutt" onclick="selected_value();">Delete</button></a>
+                <button class="btn mt-5 delbuttDown dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-download" aria-hidden="true"></i> Download </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/SIMscript" download>SIM Script</a>
+                      </div>
+                </div>
+                </div>
+              </div>
+
+              <script type="text/javascript">
+              function selected_value(){
+                var httpdel = "/delpdn_subs/";
+                var table= document.getElementById("table1").tBodies[0];
+                var rowcount = table.rows.length;
+                console.log(rowcount);
+                for(var i=0; i<rowcount;i++){
+                  var row = table.rows[i];
+                  var chkbox = row.cells[0].getElementsByTagName("input")[0];
+                  if(chkbox.checked==true){
+                    var imsi = document.getElementById("table1").rows[i+1].cells[1].innerHTML;
+                    // var mnc = document.getElementById("table1").rows[i+1].cells[2].innerHTML;
+                    // var msin = document.getElementById("table1").rows[i+1].cells[3].innerHTML;
+                    var http = "/edit_pdn_subs/"+imsi;
+                    var httpdel=httpdel+imsi+',';                    
+                    console.log(httpdel);
+                    document.getElementById("editlink").setAttribute("href",http);
+                    document.getElementById("delink").setAttribute("href",httpdel);
+                    //document.getElementById("jsonconfig").setAttribute("href",httsim);
+                  }
+                }
+
+              }
+
+              function onchangevalue(){
+                var table1 = document.getElementById("table1").tBodies[0];
+                var rowcount1 = table1.rows.length;
+                for(var j=0; j<rowcount1; j++){
+                 var row = table1.rows[j];
+                 var checkbox= row.cells[0].getElementsByTagName("input")[0];
+                 if(checkbox.checked==true){
+                       document.getElementById("table1").rows[j+1].style.color="green";
+                 }
+                 else{
+                   document.getElementById("table1").rows[j+1].style.color="black";
+                 }
+                }
+              }
+
+              </script>
+            </body>
+            </html>

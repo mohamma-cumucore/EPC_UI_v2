@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <% include ../partials/header %>
+
+  <div class="row subscriber-bg">
+       <% include ../partials/sidemenu %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+        <div class="row">Add subscriber information</div>
+        <div class="row text-danger"><%=message%></div>
+        <form method="POST" action="/adduser">
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*mcc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="244" name="mcc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*mnc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="44" name="mnc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*msin:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="1000000001" name="msin" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*msisdn:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="358441000000001" name="msisdn" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*k:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="000102030405060708090A0B0C0D0E0F" name="k" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*opc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="BC2BCE2A23BE2FAE32E4F1B4546004F7" name="opc" required>
+            </div>
+          </div>    
+
+          <div class="form-row">
+            <div class="col">
+              <div class=row>
+              <div class="col"></div>
+              <div class="col"><button class="btn btn-primary" type="submit">Submit</button></div>
+              <div class="col"></div>
+            </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3"></div>
+      </div>
+      </div>
+  </div>
+
+<% include ../partials/footer %>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang=”en”>
+
+<%- include ('../partials/head') %>
+
+<body>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <div class="container-fluid">
+    <div class="row subscriber-bg">
+      <%- include ('../partials/sidemenu') %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5" id="mainbar">
+
+        <p class="topbox ml-3">Search Results</p>
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="Thead">
+              <tr>
+                <th scope="col">imsi</th>
+                <th scope="col">msisdn</th>
+                <th scope="col">apn</th>
+                <th scope="col">qci</th>
+                <th scope="col">k</th>                
+                <th scope="col">served_party_ipv4_addr</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+              
+              var k= ue_data.k.toString('HEX');              
+              var msisdn = ue_data.msisdn;
+              var imsi = ue_data.imsi;              
+              if(ue_data.served_party_ipv4_addr==''){
+                ue_data.served_party_ipv4_addr='NULL';
+              }
+              %>
+              <tr>
+                <td><%=imsi%></td>
+                <td><%=msisdn%></td>
+                <td><%=ue_data.apn%></td>
+                <td><%=ue_data.qci%></td>
+                <td><%=k%></td>               
+                <td><%=ue_data.served_party_ipv4_addr%></td>
+              </tr>
+
+
+            </tbody>
+          </table>
+
+        </div>
+        <div class="text-center font-weight-bold mt-3"><a href="/mgt_dashboard"><button type="button"
+              class="btn blbutt">Back</button></a></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%- include ('../partials/head'); %>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <div class="container-fluid">
+    <div class="row subscriber-bg">
+    <%- include ('../partials/sidemenu'); %>
+    <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+      <p class="topbox ml-2">Available eNodeBs</p>
+      <div class="table-responsive">
+        <table class="table" id="table1">
+          <thead class="Thead">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">eNB name</th>
+              <th scope="col">IP</th>
+              <th scope="col">Latitude</th>
+              <th scope="col">Longitude</th>
+              <th scope="col">Coverage arera</th>
+              <th scope="col">Cell Id</th>
+              <th scope="col">Tracking area Id</th>
+              <th scope="col">Service Id</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <% if(data.length){
+              for(var i=0;i<data.length;i++){ %>
+                <tr>
+                  <td><input type="checkbox" value="<%=data[i].ip%>" onclick="onchangevalue();"></td>
+                  <td scope="col"><%=data[i].name%></td>
+                  <td scope="col"><%=data[i].ip%></td>
+                  <td scope="col"><%=data[i].latitude%></td>
+                  <td scope="col"><%=data[i].longitude%></td>
+                  <td scope="col"><%=data[i].coverage_area%></td>
+                  <td scope="col"><%=data[i].cell_id%></td>
+                  <td scope="col"><%=data[i].tracking_area_id%></td>
+                  <td scope="col"><%=data[i].service_id%></td>
+                </tr>
+
+            <%}
+            }%>
+          </tbody>
+        </table>
+      </div>
+      <a id="editlink"><button type="button" class="btn mt-5 mr-2 ml-2 blbutt" onclick="selected_value();">Edit</button></a>
+      <!-- <input type="button" class="btn mt-5 mr-2 ml-5 blbutt" value="Edit" onclick="windows.location.href='/edit_pdn_subs/selected_value()'"/> -->
+      <a id="delink"><button type="button" class="btn mt-5 delbutt" onclick="selected_value();">Delete</button></a>
+    </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  function selected_value(){
+    var httpdel = "/deleteconfig/";
+    var table= document.getElementById("table1").tBodies[0];
+    var rowcount = table.rows.length;
+    for(var i=0; i<rowcount; i++){
+      var row = table.rows[i];
+      var chkbox = row.cells[0].getElementsByTagName("input")[0];
+      if(chkbox.checked==true){
+        var id = chkbox.value;
+        var http = "/modifyconfig/"+id;
+        var httpdel= httpdel+id+',';
+        document.getElementById("editlink").setAttribute("href",http);
+        document.getElementById("delink").setAttribute("href",httpdel);
+      }
+    }
+
+
+  }
+  function onchangevalue(){
+    console.log('onchange values!!');
+    var table1 = document.getElementById("table1").tBodies[0];
+    var rowcount1 = table1.rows.length;
+    for(var j=0; j<rowcount1; j++){
+     var row = table1.rows[j];
+     var checkbox= row.cells[0].getElementsByTagName("input")[0];
+     if(checkbox.checked==true){
+           document.getElementById("table1").rows[j+1].style.color="green";
+     }
+     else{
+       document.getElementById("table1").rows[j+1].style.color="black";
+     }
+    }
+  }
+
+  </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{
+	"mysql_host": "localhost",
+	"mysql_db_name": "hss_lte_db",
+	"mysql_user_name": "hss",
+	"mysql_password": "hss",
+	"username": "admin",
+	"password": "admin",
+	"url": "http://localhost:8081",
+	"port": "3000",
+	"path": "/home/ubuntu/",
+	"header_name": "Cumucore Management Console"
+}

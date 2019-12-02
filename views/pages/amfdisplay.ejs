@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<%- include ('../partials/head');%>
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+  <div class="container-fluid">
+
+    <div class="row subscriber-bg">
+      <%- include ('../partials/sidemenu');%>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+        <%if(message.info){%>
+        <div>
+            <p class="alert alert-success" role="alert"><small><%=message.info%></small></p>
+        </div>
+        <%}%>
+      <p class="topbox ml-5">AMF SETTINGS</p>
+      <div class="table-responsive">
+        <table class="table" id="table1">
+          <thead class="Thead">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Name</th>
+              <th scope="col">S1 ADDRESS</th>
+              <th scope="col">MCC</th>
+              <th scope="col">MNC</th>
+              <th scope="col">S11 ADDRESS</th>
+              <th scope="col">S10 ADDRESS</th>
+              <th scope="col">S10 REMOTE ADDRESS</th>
+              <th scope="col">S11U ADDRESS</th>
+              <th scope="col">M3 ADDRESS</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% if(amfd.length){
+            for(var i=0; i<amfd.length;i++){
+              var id=amfd[i].name;
+              %>
+              <tr>
+              <td><input type="checkbox" value="<%=amfd[i].name%>" onclick="onchangevalue();"></td>
+              <td><%=id%></td>
+              <td><%=amfd[i].s1_addr_ipv4%></td>
+              <td><%=amfd[i].mcc%></td>
+              <td><%=amfd[i].mnc%></td>
+              <td><%=amfd[i].s11_addr_ipv4%></td>
+              <td><%=amfd[i].s10_addr_ipv4%></td>
+              <td><%=amfd[i].s10_rem_addr_ipv4%></td>
+              <td><%=amfd[i].s11u_addr_ipv4%></td>
+              <td><%=amfd[i].m3_addr_ipv4%></td>
+
+              <%if(amfd[i].amf_state==0){%>
+                <td>
+        <a href="/startamf/<%= id %>"><button type="button" class="btn btn-primary">start</button></a></td>
+
+
+
+              <%} else if(amfd[i].amf_state==1){%>
+                <td>
+        <a href="/startamf/<%=id%>"<button type="button" class="btn btn-danger">stop</button></a></td>
+
+            <%  } else {%>
+              <td>
+      <a href="/startamf/<%= id %>"<button type="button" class="btn btn-success">running</button></a></td>
+            <%}%>
+            </tr>
+
+        <%    }
+          } %>
+                      </tbody>
+                    </table>
+                  </div>
+
+
+                  <a id="editlink"><button type="button" class="btn mt-5 ml-5 mr-3 blbutt" onclick="selected_value();">Edit</button></a>
+                  <!-- <input type="button" class="btn mt-5 mr-2 ml-5 blbutt" value="Edit" onclick="windows.location.href='/edit_pdn_subs/selected_value()'"/> -->
+                  <a id="delink"><button type="button" class="btn mt-5 mr-3 delbutt" onclick="selected_value();">Delete</button></a>
+                  <button class="btn mt-5 delbuttDown dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-download" aria-hidden="true"></i> Download </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" id="jsonconfig" onclick="selected_value();">CONFIGURATION</a>
+                          <a class="dropdown-item" href="/amfbinary">4G(AMF)</a>
+                          <a class="dropdown-item" href="#">5G(AMF)</a>
+                          <a class="dropdown-item" href="#">NB-IoT</a>
+                          <a class="dropdown-item" href="/bmscapi">BMSCAPI</a>                          
+                        </div>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function selected_value(){
+              var httpdel = "/del_amf/";
+              var table= document.getElementById("table1").tBodies[0];
+              var rowcount = table.rows.length;
+              console.log(rowcount);
+              for(var i=0; i<rowcount;i++){
+                var row = table.rows[i];
+                var chkbox = row.cells[0].getElementsByTagName("input")[0];
+                if(chkbox.checked==true){
+                  var amfname = document.getElementById("table1").rows[i+1].cells[1].innerHTML;
+                  var http = "/edit_amf/"+amfname;
+                  var httpdel= httpdel+amfname+',';
+                  var jsonlink = "/downloadconfig/"+amfname;
+                  document.getElementById("editlink").setAttribute("href",http);
+                  document.getElementById("delink").setAttribute("href",httpdel);
+                  document.getElementById("jsonconfig").setAttribute("href",jsonlink);
+                }
+              }
+
+            }
+
+            function onchangevalue(){
+              console.log('onchange values!!');
+              var table1 = document.getElementById("table1").tBodies[0];
+              var rowcount1 = table1.rows.length;
+              for(var j=0; j<rowcount1; j++){
+               var row = table1.rows[j];
+               var checkbox= row.cells[0].getElementsByTagName("input")[0];
+               if(checkbox.checked==true){
+                     document.getElementById("table1").rows[j+1].style.color="green";
+               }
+               else{
+                 document.getElementById("table1").rows[j+1].style.color="black";
+               }
+              }
+            }
+            </script>
+            </body>
+            </html>

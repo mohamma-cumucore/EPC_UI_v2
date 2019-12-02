@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<%- include ('../partials/head') %>
+<body>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="container-fluid">
+           <div class="row d-flex d-md-block flex-nowrap wrapper">
+             <%- include ('../partials/sidemenudashboard') %>
+               <div class="col-md-10 float-left col subscriber-bg selectmarker"id ='mainbar'>
+                 <%if(message.error){%>
+                     <div class="alert alert-danger" id="enberr" role="alert"><%-message.error%></div>
+                   <%}%>
+                 <div id="info">
+                   <div id="ueip-content"></div>
+                 </div>
+                 <pre id="control">
+                     <div id="blue" onclick="displayeNB('blue');">
+                       <img src="../images/blueeye.png"alt="">
+                     </div><div id="green" onclick="displayeNB('Green');">
+                       <img src="../images/greeneye.png" alt="">
+                     </div><div  id="yellow" onclick="displayeNB('Yellow');">
+                       <img src="../images/yelloweye.png" alt="">
+                     </div>
+                 </pre>
+               </div>
+               <div id="popup" class="ol-popup">
+
+                 <div id="popup-content"></div>
+               </div>
+           </div>
+        </div>
+    </div>
+    <script>
+    var list = <%-JSON.stringify(streams)%>;
+    var users = <%-JSON.stringify(users)%>;
+    var enbconfig = <%-JSON.stringify(enbconf)%>
+    console.log(list);
+    var Lcolorlist = [{deep:'../images/blueEnb.png',light:'../images/lightblue.png',uedeep:'../images/ueBlue.png',uelight:'../images/uebluelight.png'},
+                        {deep:'../images/deepG.png',light:'../images/greenlight.png',uedeep:'../images/ueGreen.png',uelight:'../images/uegreenlight.png'},
+                        {deep:'../images/yellowEnb.png',light:'../images/lightyellow.png',uedeep:'../images/ueYellow.png',uelight:'../images/ueyellowlight.png'},
+                        {deep:'../images/blueEnb.png',light:'../images/lightblue.png',uedeep:'../images/ueBlue.png',uelight:'../images/uebluelight.png'},
+                        {deep:'../images/deepG.png',light:'../images/greenlight.png',uedeep:'../images/ueGreen.png',uelight:'../images/uegreenlight.png'},
+                        {deep:'../images/yellowEnb.png',light:'../images/lightyellow.png',uedeep:'../images/ueYellow.png',uelight:'../images/ueyellowlight.png'},
+                        {deep:'../images/blueEnb.png',light:'../images/lightblue.png',uedeep:'../images/ueBlue.png',uelight:'../images/uebluelight.png'},
+                        {deep:'../images/deepG.png',light:'../images/greenlight.png',uedeep:'../images/ueGreen.png',uelight:'../images/uegreenlight.png'},
+                        {deep:'../images/yellowEnb.png',light:'../images/lightyellow.png',uedeep:'../images/ueYellow.png',uelight:'../images/ueyellowlight.png'},
+                        {deep:'../images/blueEnb.png',light:'../images/lightblue.png',uedeep:'../images/ueBlue.png',uelight:'../images/uebluelight.png'},
+                        {deep:'../images/deepG.png',light:'../images/greenlight.png',uedeep:'../images/ueGreen.png',uelight:'../images/uegreenlight.png'},
+                        {deep:'../images/yellowEnb.png',light:'../images/lightyellow.png',uedeep:'../images/ueYellow.png',uelight:'../images/ueyellowlight.png'}
+                      ];
+      var features = [];
+      var uefeatures = [];
+      var centers = [];
+      var uecounter =0;
+      var enbcounter=0;
+      if(enbconfig.length<=0 ){
+          features = [];
+          centers = [0,0];
+          var zoomlevel = 2;
+          console.log(features.length);
+      }
+      else{
+        centers = [enbconfig[0].longitude,enbconfig[0].latitude];
+        var zoomlevel=15;
+        for(var i=0; i<enbconfig.length; i++){
+          var coordinates = [enbconfig[i].longitude,enbconfig[i].latitude];
+          features.push(new ol.Feature(
+            new ol.geom.Point(ol.proj.fromLonLat(coordinates))
+          ));
+          //display a bright eNB when it is active and connected to amf
+          if(list.length>0){
+          for(y=0; y<list.length; y++){
+            if(enbconfig[i].ip == list[y].enb_ipv4){
+                  features[enbcounter].setStyle(new ol.style.Style({
+                  image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+                  anchor: [0.5, 46],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  opacity: 0.95,
+                  src: Lcolorlist[i].deep
+                }))
+
+              }))
+              if(users.length <=0){
+                console.log('users length',users.length);
+                uefeatures=[]
+              }
+              else{
+                for(var x=0;x< users.length; x++ ){
+
+                    var coordinates = [(enbconfig[0].longitude+0.0005*Math.floor(Math.random() * 10)),(enbconfig[0].latitude-0.0005*Math.floor(Math.random() * 10))];
+                    uefeatures.push(new ol.Feature({
+                      geometry:new ol.geom.Point(ol.proj.fromLonLat(coordinates)),
+                      name:users[x].imsi
+                    }));
+                    if(users[x].enb_name ==list[y].enb_name && users[x].active_idle==1){
+                      uefeatures[uecounter].setStyle(new ol.style.Style({
+                      image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+                        anchor: [0.5, 46],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        opacity: 0.95,
+                        src: Lcolorlist[i].uedeep
+                      }))
+
+                    }));
+
+                  }
+                  //display light colors for the device if idle
+                  if(users[x].enb_name ==list[y].enb_name && users[x].active_idle==0){
+                    uefeatures[uecounter].setStyle(new ol.style.Style({
+                    image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+                      anchor: [0.5, 46],
+                      anchorXUnits: 'fraction',
+                      anchorYUnits: 'pixels',
+                      opacity: 0.95,
+                      src: Lcolorlist[i].uelight
+                    }))
+
+                  }));
+
+                }
+                  uecounter++;
+                }
+
+              }
+
+            }
+            else{
+              //console.log(Lcolorlist[i]);
+              features[enbcounter].setStyle(new ol.style.Style({
+                image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+                  anchor: [0.5, 46],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  opacity: 0.95,
+                  src: Lcolorlist[i].light
+                }))
+
+              }))
+            }
+          }
+        }
+        else{
+          features[enbcounter].setStyle(new ol.style.Style({
+            image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+              anchor: [0.5, 46],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              opacity: 0.95,
+              src: Lcolorlist[i].light
+            }))
+
+          }))
+        }
+        enbcounter++;
+        }
+      }
+
+      console.log(uefeatures);
+      for(var z=0; z<uefeatures.length; z++){
+        features.push(uefeatures[z]);
+      }
+
+      var popup = new ol.Overlay({
+        element:document.getElementById('popup'),
+        autoPan:true
+      });
+      var ueelement = document.getElementById('info');
+      var ueippopup = new ol.Overlay({
+        element:ueelement,
+        positioning: 'bottom-center',
+        stopEvent: false,
+        offset: [0, -50]
+      });
+
+    var osmSource = new ol.source.OSM({
+                transition: 0
+              });
+    var rasterSource = new ol.source.Raster({
+                  sources: [osmSource],
+                  operation: function(pixels,data) {
+                        var pixel = pixels[0];
+
+                        var r = pixel[0];
+                        var g = pixel[1];
+                        var b = pixel[2];
+
+                        // CIE luminance for the RGB
+                        var v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                        pixel[0] = v; // Red
+                        pixel[1] = v; // Green
+                        pixel[2] = v; // Blue
+                        //pixel[3] = 255;
+
+                        return pixel;
+                    }
+              });
+    console.log(features.length);
+    var mapLayer = new ol.layer.Image({
+                  source: rasterSource
+              });
+
+    var symbols = new ol.layer.Vector({
+           source: new ol.source.Vector({
+             //features: [features,usericon],
+             features:features,
+             wrapX: false
+           })
+         })
+
+    var map = new ol.Map({
+                layers: [mapLayer,symbols
+                ],
+                overlays: [popup,ueippopup],
+                target: 'mainbar',
+                view: new ol.View({
+                  center: ol.proj.fromLonLat(centers),
+                  zoom: zoomlevel
+                })
+          });
+
+    //display the ue ip on mouse hover
+
+    map.on('pointermove', function(evt) {
+              var feature = map.forEachFeatureAtPixel(evt.pixel,
+                function(feature) {
+                  return feature;
+                });
+              if (feature) {
+                var coordinates = feature.getGeometry().getCoordinates();
+                ueippopup.setPosition(coordinates);
+                $(ueelement).popover({
+                  placement: 'top',
+                  html: true,
+                  content: feature.get('name')
+                });
+                $(ueelement).popover('show');
+              } else {
+                $(ueelement).popover('destroy');
+              }
+            });
+      //Adding new enb configurations
+
+      map.on('click', function(evt) {
+
+                    //var element = popup.getElement();
+                    var coordinate = evt.coordinate;
+                    var hdms = ol.proj.toLonLat(coordinate);
+                    //console.log(hdms[0]);
+
+                    var content = '<div class="card"><div class="card-header">Add New eNB</div><div class="card-body"><form method="post" action="/postconfig"><div class="form-row"><div class="col"><label for="Default01">eNBname:</label></div><div class="col"><input type="text" value="eNB X" name="eNBname"></div></div><div class="form-row"><div class="col"><label for="Default01">IP:</label></div><div class="col"><input type="text" value="127.0.0.1" name="eNBIP"></div></div><div class="form-row"><div class="col"><label for="Default01">Latitude:</label></div><div class="col"><input type="text" id="latitude" value="" name="gps_coorlat"></div></div><div class="form-row"><div class="col"><label for="Default01">Longitude:</label></div><div class="col"><input type="text" id="longitude" value="" name="gps_coorlng"></div></div><div class="form-row"><div class="col"><label for="Default01">cell Id:</label></div><div class="col"><input type="text" id="cellid" value="12345" name="cellID"></div></div><div class="form-row"><div class="col"><label for="Default01">Tracking area Id:</label></div><div class="col"><input type="text"id="trackarea" value="12547" name="trackingA_ID"></div></div><div class="form-row"><div class="col"><label for="Default01">service Id:</label></div><div class="col"><input type="text" id="serviceid" value="12457" name="service_ID"></div></div>';
+                    content= content+'<div class="btn-group btn-group-md"><button class="btn blbutt mb-2 mr-3 mt-5" type="submit">Add</button><a href="/mgt_dashboard"><button type="button" class="btn delbutt mb-2 mt-5">Cancel</button></a></div></form></div></div>';
+
+                    popup.setPosition(coordinate);
+                    document.getElementById('popup-content').innerHTML= content;
+                    document.getElementById('latitude').value = hdms[1];
+                    document.getElementById('longitude').value = hdms[0];
+
+                  });
+
+      function displayeNB(color){
+        alert('This is '+color+' enb');
+      }
+
+    </script>
+    <script src="https://openlayers.org/en/v4.6.5/build/ol.js "type="text/javascript"></script>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

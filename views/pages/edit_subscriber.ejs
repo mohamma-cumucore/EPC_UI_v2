@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<% include ../partials/head %>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <% include ../partials/header %>
+
+
+      <div class="row subscriber-bg">
+        <% include ../partials/sidemenu %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+        <div class="row">Edit subscriber information</div>
+        <%
+          var msin_e= edit_data.msin.toString('HEX');
+          var k_e= edit_data.k.toString('HEX');
+          var opc_e= edit_data.opc.toString('HEX');
+          var id= edit_data.msisdn;
+        %>
+        <form method="POST" action="/edit_subscriber/<%=id%>">
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*mcc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=edit_data.mcc%>" name="mcc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*mnc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=edit_data.mnc%>" name="mnc" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*msin:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=msin_e%>" name="msin" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*msisdn:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=edit_data.msisdn%>" name="msisdn" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*k:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=k_e%>" name="k" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="validationDefault01">*opc:</label>
+              <input type="text" class="form-control" id="validationDefault01" value="<%=opc_e%>" name="opc" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              <div class=row>
+              <div class="col"></div>
+              <div class="col"><button class="btn btn-primary" type="submit">Submit</button></div>
+              <div class="col"></div>
+            </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3"></div>
+      </div>
+      </div>
+
+  </div>
+
+<% include ../partials/footer %>
+
+</body>
+</html>

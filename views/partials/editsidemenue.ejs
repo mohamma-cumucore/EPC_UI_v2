@@ -1,0 +1,42 @@
+<div class="col-md-2 float-left col-1 pl-0 pr-0 collapse width show" id="sidebar">
+  <div class="list-group panel">
+    <div class="headerbox">
+
+    </div>
+             <a href="/mgt_dashboard" class="list-group-item collapsed" data-parent="#sidebar"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-sm-down">Home</span></a>
+             <a href="#menu3" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"><i class="fa fa-user-o" aria-hidden="true"></i><span class="hidden-sm-down">Users</span></a>
+             <div class="collapse" id="menu3">
+                 <a href="/add_pdn_subscription" class="list-group-item" data-parent="#menu3">Add</a>
+                 <a href="/display_pdn_subsc" class="list-group-item" data-parent="#menu3">Browse</a>
+             </div>
+             <a href="#menu4" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hidden-sm-down">AMF</span></a>
+             <div class="collapse" id="menu4">
+                 <a href="/amfadd" class="list-group-item" data-parent="#menu4">Add</a>
+                 <a href="/amfdisplay" class="list-group-item" data-parent="#menu4">Browse</a>
+             </div>
+             <a href="#menu5" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"><i class="fa fa-server" aria-hidden="true"></i><span class="hidden-sm-down">SMF</span></a>
+             <div class="collapse" id="menu5">
+                 <a href="/smfadd" class="list-group-item" data-parent="#menu5">Add</a>
+                 <a href="/smfdisplay" class="list-group-item" data-parent="#menu5">Browse</a>
+             </div>
+             <a href="#menu6" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"><i class="fa fa-sitemap" aria-hidden="true"></i><span class="hidden-sm-down">Operator</span></a>
+             <div class="collapse" id="menu6">
+                 <a href="/operator" class="list-group-item" data-parent="#menu6">Add</a>
+                 <a href="/display_operator" class="list-group-item" data-parent="#menu6">Browse</a>
+             </div>
+             <a href="#menu1" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"><i class="fa fa-map-o" aria-hidden="true"></i><span class="hidden-sm-down">eNB configuration</span></a>
+             <div class="collapse" id="menu1">
+                 <a href="/addenbconf" class="list-group-item" data-parent="#menu1">Add</a>
+                 <a href="/viewconfig" class="list-group-item" data-parent="#menu1">Browse</a>
+             </div>
+
+             <a href="/logout" class="list-group-item collapsed" data-parent="#sidebar"><i class="fa fa-power-off" aria-hidden="true"></i><span class="hidden-sm-down">Logout</span></a>
+             <form class="example" method="post" action="/UE_search">
+               <input type="text" placeholder="IMSI Number" name="imsi">
+               <button type="submit"><i class="fa fa-search"></i></button>
+             </form>
+             <p class="font-weight-bold footlogo">© 2018 Cumucore</p>
+
+         </div>
+
+</div>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang=”en”>
+
+<%- include ('../partials/head');%>
+<body>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+      <div class="container-fluid">
+    <div class="row subscriber-bg">
+    <%- include ('../partials/sidemenu');%>
+        <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+        <%if(message.error){%>
+            <div class="alert alert-danger" role="alert"><%-message.error%></div>
+          <%}%>
+          <%if(message.info){%>
+            <div class="alert alert-success" role="alert"><%-message.info%></div>
+            <%}%>
+      <p class="topbox">OPERATOR SETTINGS</p>
+      <div class="table-responsive">
+        <table class="table" id="table1">
+          <thead class="Thead">
+            <tr>
+              <th scope="col-1"></th>
+              <th scope="col">mcc</th>
+              <th scope="col">mnc</th>
+              <th scope="col">op</th>
+              <th scope="col">amf</th>
+              <th scope="col">name</th>
+            </tr>
+          </thead>
+        <tbody>
+          <% if(operator.length){
+            for(var i=0; i<operator.length;i++){
+              var op= operator[i].op.toString('HEX');
+              var amf= operator[i].amf.toString('HEX');
+              var mnc= operator[i].mnc;
+              var mcc = operator[i].mcc;
+              %>
+              <tr>
+              <td><input type="checkbox" onclick="onchangevalue()"></td>
+              <td><%=operator[i].mcc%></td>
+              <td><%=operator[i].mnc%></td>
+              <td><%=op%></td>
+              <td><%=amf%></td>
+              <td><%=operator[i].name%></td>
+              <%}
+            } %>
+        </tbody>
+                    </table>
+                  </div>
+                  <div class="editdel">
+                    <a id="editlink"><button class="btn mr-3 blbutt" onclick="selected_value();">Edit</button></a>
+                    <a id="delink"><button class="btn delbutt" onclick="selected_value();">Delete</button></a>
+                  </div>
+                </div>
+                </div>
+                </div>            
+            <script type="text/javascript">
+            function selected_value(){
+              var table= document.getElementById("table1").tBodies[0];
+              var rowcount = table.rows.length;
+              var httpdel="/del_operator/";
+              for(var i=0; i<rowcount;i++){
+                var row = table.rows[i];
+                var chkbox = row.cells[0].getElementsByTagName("input")[0];
+                if(chkbox.checked==true){
+                  var mcc = document.getElementById("table1").rows[i+1].cells[1].innerHTML;
+                  var mnc = document.getElementById("table1").rows[i+1].cells[2].innerHTML;
+                  var http = "/edit_operator/"+mnc+"/"+mcc;
+                   httpdel= httpdel+mnc+"-"+mcc+"s";
+                  console.log(http);
+                  document.getElementById("editlink").setAttribute("href",http);
+                  document.getElementById("delink").setAttribute("href",httpdel);
+                }
+              }
+            }
+            function onchangevalue(){
+              var table1 = document.getElementById("table1").tBodies[0];
+              var rowcount1 = table1.rows.length;
+              for(var j=0; j<rowcount1; j++){
+               var row = table1.rows[j];
+               var checkbox= row.cells[0].getElementsByTagName("input")[0];
+               if(checkbox.checked==true){
+                     document.getElementById("table1").rows[j+1].style.color="green";
+               }
+               else{
+                 document.getElementById("table1").rows[j+1].style.color="black";
+               }
+              }
+            }
+
+            </script>
+            </body>
+            </html>

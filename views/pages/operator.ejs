@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<%- include ('../partials/head') %>
+
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <div class="container-fluid">
+  <div class="row subscriber-bg">
+    <%- include ('../partials/sidemenu');%>
+<div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+    <div class="row">
+      <div class="col-md-9">
+        <%if(error){%>
+        <div class="">
+        <% for(err in error){ %>
+          <p class="alert alert-danger" role="alert"><small><%=error[err].msg%></small></p>
+        <%}%>
+      </div>
+      <%}%>
+      <%if(message){%>
+      <div class="">
+        <p class="alert alert-danger" role="alert"><small><%=message%></small></p>
+      </div>
+      <%}%>
+        <div class="topbox">ADD OPERATOR</div>
+      <%
+      var op= input.op.toString('HEX');
+      var amf= input.amf.toString('HEX');
+      %>
+        <form method="POST" action="/operator">
+
+          <div class="form-row">
+            <div class="col-2" id="errmcc"><label for="validationDefault01">*MCC:</label></div>
+            <div class="col">
+              <select id="country" onchange="mnc_value()" name="mcc">
+                <option value="289">Abkhazia</option>
+                <option value="412">Afghanistan</option>
+                <option value="276">Albania</option>
+                <option value="603">Algeria</option>
+                <option value="544">Ameriacan Samoa</option>
+                <option value="213">Andora</option>
+                <option value="631">Angola</option>
+                <option value="722">Argentina Republic</option>
+                <option value="283">Armenia</option>
+                <option  value="363">Aruba</option>
+                <option value="505">Australia</option>
+                <option value="232">austria</option>
+                <option value="400">Azerbajan</option>
+                <option value="364">Bahamas</option>
+                <option value="426">Bahrain</option>
+                <option value="470">Bangladish</option>
+                <option value="342">Barbados</option>
+                <option value="257">Belarus</option>
+                <option value="206">Belgium</option>
+                <option value="702">Belize</option>
+                <option value="616">Benin</option>
+                <option value="350">Bermuda</option>
+                <option value="402">Bhutan</option>
+                <option value="736">Bolivia</option>
+                <option value="218">Bosnia and Herzegovina</option>
+                <option value="652">Botswana</option>
+                <option value="724">Brazil</option>
+                <option value="995">British Indian Ocean Territory</option>
+                <option value="348">British Vergin Islands</option>
+                <option value="528">Brunei</option>
+                <option value="284">Bulgaria</option>
+                <option value="613">Burkina Faso</option>
+                <option value="642">Brundi</option>
+                <option value="456">Cambodia</option>
+                <option value="624">Cameroon</option>
+                <option value="302">Canada</option>
+                <option value="625">Cape Verde</option>
+                <option value="346">Cayman Islands</option>
+                <option value="623">Central African Republic</option>
+                <option value="622">Chad</option>
+                <option value="460">Chile</option>
+                <option value="732">Colombia</option>
+                <option value="654">Comoros</option>
+                <option value="629">Congo</option>
+                <option value="548">Cook Islands</option>
+                <option value="712">Costa Rica</option>
+                <option value="219">Croatia</option>
+                <option value="368">Cuba</option>
+                <option value="280">Cyprus</option>
+                <option value="230">Czech Republic</option>
+                <option value="630">Democratic Republic of Congo</option>
+                <option value="238">Denmark</option>
+                <option value="638">Djibouti</option>
+                <option value="370">Domnica Republic</option>
+                <option value="514">East Timor</option>
+                <option value="740">Ecuador</option>
+                <option value="602">Egypt</option>
+                <option value="706">El Salvador</option>
+                <option value="627">Equatorial Guinea</option>
+                <option value="657">Eritrea</option>
+                <option value="248">Estonia</option>
+                <option value="636">Ethiopia</option>
+                <option value="542">Fiji</option>
+                <option value="244">Finland</option>
+                <option value="208">France</option>
+                <option value="628">Gabon</option>
+                <option value="607">Gambia</option>
+                <option value="262">Germany</option>
+                <option value="620">Ghana</option>
+                <option value="266">Gibralter</option>
+                <option value="202">Greece</option>
+                <option value="352">Grenada</option>
+                <option value="704">Guatemala</option>
+                <option value="611">Guinea</option>
+                <option value="262">Guinea-Bissau</option>
+                <option value="738">Guyna</option>
+                <option value="372">Haiti</option>
+                <option value="708">Honduras</option>
+                <option value="216">Hungary</option>
+                <option value="274">Iceland</option>
+                <option value="404">India</option>
+                <option value="510">Indonesia</option>
+                <option value="432">Iran</option>
+                <option value="418">Iraq</option>
+                <option value="272">Ireland</option>
+                <option value="425">Isreal</option>
+                <option value="222">Italy</option>
+                <option value="216">Ivory coast</option>
+                <option value="338">Jamaica</option>
+                <option value="440">Japan</option>
+                <option value="416">Jordan</option>
+                <option value="401">Kazakhstan</option>
+                <option value="639">Kenya</option>
+                <option value="545">Kiribati</option>
+                <option value="467">Korea, North</option>
+                <option value="450">Korea, South</option>
+                <option value="221">Kososvo</option>
+                <option value="419">Kuwait</option>
+                <option value="437">Kyrgystan</option>
+                <option value="457">Laos</option>
+                <option value="247">Latvia</option>
+                <option value="415">Lebanon</option>
+                <option value="216">Lesotho</option>
+                <option value="618">Liberia</option>
+                <option value="606">Libya</option>
+                <option value="295">Liechtenstein</option>
+                <option value="246">Lithuania</option>
+                <option value="270">Luxemburg</option>
+                <option value="294">North Macedonia</option>
+                <option value="646">Madagascar</option>
+                <option value="650">Malawi</option>
+                <option value="502">Malysia</option>
+                <option value="610">Mali</option>
+                <option value="472">Maldives</option>
+                <option value="278">Malta</option>
+                <option value="551">Marshall Islands</option>
+                <option value="609">Mauritania</option>
+                <option value="617">Mauritius</option>
+                <option value="334">Mexico</option>
+                <option value="259">Moldova</option>
+                <option value="212">Monaco</option>
+                <option value="428">Mongolia</option>
+                <option value="297">Montenegro</option>
+                <option value="604">Morocco</option>
+                <option value="643">Mozambique</option>
+                <option value="414">Myanmar</option>
+                <option value="649">Namibia</option>
+                <option value="536">Nauru</option>
+                <option value="429">Nepal</option>
+                <option value="204">Netherlands</option>
+                <option value="546">New caledonia</option>
+                <option value="530">New Zealand</option>
+                <option value="710">Nicaragua</option>
+                <option value="216">Niger</option>
+                <option value="621">Nigeria</option>
+                <option value="242">Norway</option>
+                <option value="422">Oman</option>
+                <option value="410">Pakistan</option>
+                <option value="552">Palau</option>
+                <option value="425">Palestine</option>
+                <option value="714">Panama</option>
+                <option value="537">Papua New Guinea</option>
+                <option value="744">Paraguay</option>
+                <option value="716">Peru</option>
+                <option value="515">Philippines</option>
+                <option value="260">Poland</option>
+                <option value="268">Portugal</option>
+                <option value="330">Puerto Rico</option>
+                <option value="427">Qatar</option>
+                <option value="226">Romania</option>
+                <option value="250">Russian federation</option>
+                <option value="635">Rwanda</option>
+                <option value="338">Saint Lucia</option>
+                <option value="549">Samoa</option>
+                <option value="292">San Marino</option>
+                <option value="626">Sao tome and Principe</option>
+                <option value="420">Saudi Arabia</option>
+                <option value="608">Senegal</option>
+                <option value="220">Serbia</option>
+                <option value="633">Seychelles</option>
+                <option value="619">Sierra Leone</option>
+                <option value="525">Singapore</option>
+                <option value="362">Sint Maarten</option>
+                <option value="231">Slovakia</option>
+                <option value="293">Slovenia</option>
+                <option value="540">Solomon Islands</option>
+                <option value="637">Somalia</option>
+                <option value="655">South Africa</option>
+                <option value="659">South Sudan</option>
+                <option value="214">Spain</option>
+                <option value="413">Srilanka</option>
+                <option value="634">Sudan</option>
+                <option value="746">Suriname</option>
+                <option value="653">Swaziland</option>
+                <option value="240">Sweden</option>
+                <option value="228">Switzerland</option>
+                <option value="417">Syria</option>
+                <option value="466">Taiwan</option>
+                <option value="436">Tajikistan</option>
+                <option value="640">Tanzania</option>
+                <option value="520">Thiland</option>
+                <option value="615">Togo</option>
+                <option value="554">Tokelau</option>
+                <option value="539">Tonga</option>
+                <option value="374">Trinidad and Tobago</option>
+                <option value="605">Tunisia</option>
+                <option value="286">Turkey</option>
+                <option value="438">Turkmenistan</option>
+                <option value="376">Turks and caicos Islands</option>
+                <option value="553">Tuvalu</option>
+                <option value="641">Uganda</option>
+                <option value="255">Ukraine</option>
+                <option value="424">United Arab Emirates(424)</option>
+                <option value="430">United Arab Emirates(Abu Dhabi)(430)</option>
+                <option value="431">United Arab Emirates(Dubai)(431)</option>
+                <option value="234">United Kingdom(234)</option>
+                <option value="235">United Kingdom(235)</option>
+                <option value="310">United States of America(310)</option>
+                <option value="311">United States of America(311)</option>
+                <option value="312">United States of America(312)</option>
+                <option value="313">United States of America(313)</option>
+                <option value="314">United States of America(314)</option>
+                <option value="315">United States of America(315)</option>
+                <option value="316">United States of America(316)</option>
+                <option value="332">United States Vergin Islands</option>
+                <option value="748">Urugay</option>
+                <option value="434">Uzbekistan</option>
+                <option value="541">Vanuatu</option>
+                <option value="734">Venezuela</option>
+                <option value="452">vietnam</option>
+                <option value="748">Wallis and Futuna</option>
+                <option value="421">Yemen</option>
+                <option value="645">Zambia</option>
+                <option value="648">Zimbabwe</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+              <div class="addgap" id="errmnc"><label for="validationDefault01">*MNC:</label></div>
+              <div class="col">
+              <input type="text" class="form-control" id="mnc" value="<%=input.mnc%>" name="mnc" required='true'>
+            </div>
+          </div>
+          <div class="form-row">
+              <div class="addgap"><label for="validationDefault01">*OP:</label></div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault01" value="<%=op%>" name="op" required='true'>
+            </div>
+          </div>
+          <div class="form-row">
+              <div class="addgap"><label for="validationDefault01">*AMF:</label></div>
+            <div class="col">
+              <input type="text" class="form-control" id="validationDefault01" value="<%=amf%>" name="amf" required='true'>
+            </div>
+          </div>
+          <div class="form-row">
+                <div class="addgap"><label for="validationDefault01">*NAME:</label></div>
+            <div class="col">
+
+              <input type="text" class="form-control" id="operator" value="<%=input.name%>" name="name" required ='true'>
+            </div>
+          </div>
+          <div class="botbox"><small>*Mandatory fields</small></div>
+          <div class="row">
+              <div class="btn-group btn-group-md">
+
+                <button class="btn mt-5 mr-3 blbutt" type="submit">Submit</button>
+                <a href="/display_operator"><button type="button" class="btn mt-5 delbutt">Cancel</button></a>
+
+              </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3"></div>
+
+      </div>
+      </div>
+
+  </div>
+  </div>
+<script type="text/javascript">
+var mcc_mnc = <%-JSON.stringify(file)%>;
+var message = <%-JSON.stringify(message)%>;
+if(message=="DUPLICATE ENTRY(MCC,MNC)"){
+  document.getElementById("errmcc").style.color="#F08080";
+  document.getElementById("errmnc").style.color="#F08080";
+}
+function mnc_value(){
+  var x = document.getElementById("country").value;
+  for (var i=0; i< mcc_mnc.length; i++){
+    if(mcc_mnc[i].mcc == x){
+      document.getElementById("mnc").value = mcc_mnc[i].mnc;
+      document.getElementById("operator").value = mcc_mnc[i].network;
+        }
+  }
+
+  }
+</script>
+
+</body>
+</html>

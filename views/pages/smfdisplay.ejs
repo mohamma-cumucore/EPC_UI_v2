@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<%- include ('../partials/head') %>
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <div class="container-fluid">   
+    <div class="row subscriber-bg">
+      <%- include ('../partials/sidemenu') %>
+  <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+    <%if(message.info){%>
+    <div>
+        <p class="alert alert-success" role="alert"><small><%=message.info%></small></p>
+    </div>
+    <%}%>
+      <div class="topbox ml-5">SMF SETTINGS</div>
+      <div class="table-responsive">
+        <table class="table" id="table1">
+          <thead class="Thead">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">NAME</th>
+              <th scope="col">S11 ADDRESS</th>
+              <th scope="col">AMF S11 ADDRESS</th>
+              <th scope="col">S5 ADDRESS</th>
+              <th scope="col">UPF S5 ADDRESS</th>
+              <th scope="col">S1U ADDRESS</th>
+              <th scope="col">SGMB ADDRESS</th>
+              <th scope="col">IoT UP ADDRESS</th>
+              <th scope="col">IoT S5 ADDRESS</th>
+              <th scope="col">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% if(smfd.length){
+            for(var i=0; i<smfd.length;i++){
+              var id=smfd[i].name;
+              %>
+              <tr>
+              <td><input type="checkbox"onclick="onchangevalue();"></td>
+              <td><%=id%></td>
+              <td><%=smfd[i].s11_addr_ipv4%></td>
+              <td><%=smfd[i].amf_s11_addr_ipv4%></td>
+              <td><%=smfd[i].s5_addr_ipv4%></td>
+              <td><%=smfd[i].upf_s5_addr_ipv4%></td>
+              <td><%=smfd[i].s1u_uplink_addr_ipv4%></td>
+              <td><%=smfd[i].sgmb_addr_ipv4%></td>
+              <td><%=smfd[i].iot_upf_user_plane_addr_ipv4%></td>
+              <td><%=smfd[i].iot_upf_s5_addr_ipv4%></td>
+              <%if(smfd[i].smf_state==0){%>
+                <td>
+                  <a href="/startsmf/<%= id %>"><button type="button" class="btn btn-primary">start</button></a></td>
+
+              <%} else{%>
+                <td>
+        <a href="/startsmf/<%= id %>"<button type="button" class="btn btn-danger">stop</button></a></td>
+
+            <%  }%>
+
+            </tr>
+
+        <%    }
+          } %>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <a id="editlink"><button type="button" class="btn mt-5 ml-5 mr-3 blbutt" onclick="selected_value();">Edit</button></a>
+                  <!-- <input type="button" class="btn mt-5 mr-2 ml-5 blbutt" value="Edit" onclick="windows.location.href='/edit_pdn_subs/selected_value()'"/> -->
+                  <a id="delink"><button type="button" class="btn mt-5 mr-3 delbutt" onclick="selected_value();">Delete</button></a>
+                  <button class="btn mt-5 delbuttDown dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-download" aria-hidden="true"></i> Download </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" id="jsonconfig" onclick="selected_value();">CONFIGURATION</a>
+                          <a class="dropdown-item" href="/smfbinary">SMF</a>
+                          <a class="dropdown-item" href="/smfembmsbinary">SMF-eMBMS</a>
+                        </div>
+                  </div>
+              </div>
+            </div>
+              <script type="text/javascript">
+              function selected_value(){
+                var httpdel ="/del_smf/";
+                var table= document.getElementById("table1").tBodies[0];
+                var rowcount = table.rows.length;
+                console.log(rowcount);
+                for(var i=0; i<rowcount;i++){
+                  var row = table.rows[i];
+                  var chkbox = row.cells[0].getElementsByTagName("input")[0];
+                  if(chkbox.checked==true){
+                    console.log('Checked');
+                    var smfname = document.getElementById("table1").rows[i+1].cells[1].innerHTML;
+                    var http = "/edit_smf/"+smfname;
+                    var httpdel= httpdel+smfname+",";
+                    var jsonlink = "/downloadSMFconfig/"+smfname;
+                    document.getElementById("editlink").setAttribute("href",http);
+                    document.getElementById("delink").setAttribute("href",httpdel);
+                    document.getElementById("jsonconfig").setAttribute("href",jsonlink);
+
+                  }
+                }
+                //console.log('hellooooooo');
+
+              }
+              function onchangevalue(){
+                console.log('onchange values!!');
+                var table1 = document.getElementById("table1").tBodies[0];
+                var rowcount1 = table1.rows.length;
+                for(var j=0; j<rowcount1; j++){
+                 var row = table1.rows[j];
+                 var checkbox= row.cells[0].getElementsByTagName("input")[0];
+                 if(checkbox.checked==true){
+                       document.getElementById("table1").rows[j+1].style.color="green";
+                 }
+                 else{
+                   document.getElementById("table1").rows[j+1].style.color="black";
+                 }
+                }
+              }
+              </script>
+            </body>
+            </html>
