@@ -7,6 +7,6 @@
 	"password": "admin",
 	"url": "http://localhost:8081",
 	"port": "3000",
-	"path": "/home/ubuntu/",
+	"path": "/home/mohamma/",
 	"header_name": "Cumucore Management Console"
 }

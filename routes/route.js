@@ -40,7 +40,7 @@ router.get('/deleteServ/:id', controller.deleteService);
 router.get('/services/(:id)/sessions', controller.addSessions);
 router.get('/services/(:id)/vsessions', controller.viewsessions);
 router.get('/delete-session/:ser_res_id/:id', controller.deletesession);
-router.get('/downloadSMFconfig/:id', controller.smfconfig);
+router.get('/downloadSMFconfig/(:id)', controller.smfconfig);
 router.get('/add_pdn_subscription', controller.user);
 router.get('/display_pdn_subsc', controller.listusers);
 router.get('/edit_pdn_subs/:imsi', controller.editusers);
@@ -52,7 +52,8 @@ router.get('/del_operator/:id', controller.deleteoperator);
 router.get('/viewconfig', controller.listeNB);
 router.get('/modifyconfig/:id', controller.modifyeNB);
 router.get('/deleteconfig/:id', controller.deleteNB);
-router.get('/downloadconfig/:id', controller.amfconfig);
+router.get('/downloadconfig/(:id)', controller.amfconfig);
+router.get('/SIMscript', controller.simwriter);
 
 /* adding values to the db */
 router.post('/amfadd', [
@@ -94,6 +95,7 @@ router.post('/amfadd', [
         mmegi: req.body.mmegi,
         mcc: req.body.mcc,
         mnc: req.body.mnc,
+        mnc_len: (req.body.mnc).length,
         s11u_addr_ipv4: req.body.s11u_addr_ipv4,
         s10_addr_ipv4: req.body.s10_addr_ipv4,
         mysql_host: req.body.mysql_host,
@@ -111,6 +113,7 @@ router.post('/amfadd', [
         periodic_tau_timer: req.body.periodic_tau_timer,
         s10_mcc: req.body.s10_mcc,
         s10_mnc: req.body.s10_mnc,
+        s10_mnc_len: (req.body.mnc).length,
         s10_mmec: req.body.s10_mmec,
         s10_mmegi: req.body.s10_mmegi,
         s10_rem_addr_ipv4: req.body.s10_rem_addr_ipv4,
@@ -125,6 +128,7 @@ router.post('/amfadd', [
         n11_addr_ipv6: "",
         mcc: req.body.mcc_5g,
         mnc: req.body.mnc_5g,
+        mnc_len: (req.body.mnc).length,
         amf_region_id: req.body.amf_region_id,
         amf_set_id: req.body.amf_set_id,
         amf_pointer: req.body.amf_pointer,
@@ -210,6 +214,7 @@ router.post('/edit_amf/(:id)', [
         mmegi: req.body.mmegi,
         mcc: req.body.mcc,
         mnc: req.body.mnc,
+        mnc_len: (req.body.mnc).length,
         s11u_addr_ipv4: req.body.s11u_addr_ipv4,
         s10_addr_ipv4: req.body.s10_addr_ipv4,
         mysql_host: req.body.mysql_host,
@@ -227,6 +232,7 @@ router.post('/edit_amf/(:id)', [
         periodic_tau_timer: req.body.periodic_tau_timer,
         s10_mcc: req.body.s10_mcc,
         s10_mnc: req.body.s10_mnc,
+        s10_mnc_len: (req.body.mnc).length,
         s10_mmec: req.body.s10_mmec,
         s10_mmegi: req.body.s10_mmegi,
         s10_rem_addr_ipv4: req.body.s10_rem_addr_ipv4,
@@ -241,6 +247,7 @@ router.post('/edit_amf/(:id)', [
         n11_addr_ipv6: "::1",
         mcc: req.body.mcc_5g,
         mnc: req.body.mnc_5g,
+        mnc_len: (req.body.mnc).length,
         amf_region_id: req.body.amf_region_id,
         amf_set_id: req.body.amf_set_id,
         amf_pointer: req.body.amf_pointer,
@@ -270,7 +277,7 @@ router.post('/edit_amf/(:id)', [
             }
             else {
                 //console.log('successfully saved');
-                req.flash('info','SUCCESSFULLY UPDATED!');
+                req.flash('info', 'SUCCESSFULLY UPDATED!');
                 res.redirect('/amfdisplay');
             }
 
@@ -342,7 +349,7 @@ router.post('/smfadd', [
             }
             else {
                 //console.log('data successfully saved');
-                req.flash('info','DATA SUCCESSFULLY SAVED!');
+                req.flash('info', 'DATA SUCCESSFULLY SAVED!');
                 res.redirect('/smfdisplay');
             }
 
@@ -414,7 +421,7 @@ router.post('/edit_smf/(:id)', [
             }
             else {
                 //console.log('smf data successfully updated');
-                req.flash('info','DATA SUCCESSFULLY UPDATED!!');
+                req.flash('info', 'DATA SUCCESSFULLY UPDATED!!');
                 res.redirect('/smfdisplay');
             }
         });
@@ -461,7 +468,7 @@ router.post('/modify-service/:id', [
             }
             else {
                 res.redirect('/services');
-            }            
+            }
 
         });
     }
@@ -553,10 +560,10 @@ router.post('/add_pdn_subscription', [
     check('msisdn').isLength({ min: 7, max: 15 }).withMessage('Error! The length of msisdn should be 15!').isInt().withMessage('Error! msisdn should be integer value!').trim(),
     check('apn').isAlpha().withMessage('Error! apn should be Alphabetic only!').trim(),
     check('k').isHexadecimal().withMessage('Error! The k field requires hexadecimal value!').trim(),
-    
+
 ], function (req, res) {
     var errors = validationResult(req);
- 
+
     var countryx = fs.readFileSync(process.cwd() + "/public/mcc-mnc-table.json");
     var mcc_mnc = JSON.parse(countryx);
     var input_data = {
@@ -571,7 +578,7 @@ router.post('/add_pdn_subscription', [
     };
     console.log('imsi value is: ', (req.body.mcc + req.body.mnc + req.body.msin));
     if (!errors.isEmpty()) {
-       
+
         res.render('pages/add_pdn_subscription', { message: '', error: errors.array(), input: input_data, file: mcc_mnc });
 
     }
@@ -587,33 +594,33 @@ router.post('/add_pdn_subscription', [
         var msin = req.body.msin;
         var mnc = req.body.mnc;
         var mcc = req.body.mcc;
-        
+
         if (mnc.length == 3) {
             var msisdn_12 = msisdn.substring(2);
         }
         else {
             var msisdn_12 = msisdn.substring(3);
         }
-     
+
         if (msisdn_12 == (mnc + msin)) {
 
             var sql = "INSERT INTO pdn_subscription_ctx SET imsi=?,ctx_id=?, apn=?, pgw_allocation_type=?,vplmn_dynamic_address_allowed =?,eps_pdn_subscribed_charging_characteristics=?, pdn_addr_type =?,pdn_addr=?,subscribed_apn_ambr_dl=?,subscribed_apn_ambr_up=?, qci=?, qos_allocation_retention_priority_level =?, qos_allocation_retention_priority_preemption_capability =?, qos_allocation_retention_priority_preemption_vulnerability=?,served_party_ipv4_addr= ?";
             var sql_subsc = "INSERT INTO subscriber_profile SET imsi = ?,msisdn= ?,k= UNHEX(?),opc= ?,sqn= ?,imsisv=?,ue_ambr_ul =?,ue_ambr_dl=?";
-           
+
             db.query(sql, [req.body.mcc + req.body.mnc + req.body.msin, 0, req.body.apn, 0x00, 0x00, 0x0000, 0x00, 0x000000000000000000000000, 100000, 100000, req.body.qci, 15, 0x00, 0x00, req.body.served_party_ipv4_addr], function (err, pdn_data) {
                 if (err) {
-                    
+
                 }
             });
             db.query(sql_subsc, [req.body.mcc + req.body.mnc + req.body.msin, req.body.msisdn, req.body.k, null, 0x000000000020, 0x0000000000000000, 100000, 100000], function (err, result, fields) {
-              
+
 
                 if (err) {
-                
+
                     res.render('pages/add_pdn_subscription', { message: "Duplicate ENTRY(MCC,MNC,MSIN)", error: {}, input: input_data, file: mcc_mnc });
                 }
                 else {
-                    var simwriter = fs.appendFile(process.cwd() + "/public/SIMscript.txt", "\n1234 88888888 1234 88888888 0102030405060708 894900150624013455 " + "" + parseFloat(mcc + mnc + msin) + " 004 " + Number(msisdn) + " " + req.body.k + " NULL", (error) => {
+                    var simwriter = fs.appendFile(process.cwd() + "/public/SIMscript.txt", "1234 88888888 1234 88888888 0102030405060708 894900150624013455 " + "" + parseFloat(mcc + mnc + msin) + " 0004 " + Number(msisdn) + " " + req.body.k + " NULL", (error) => {
                         if (error) {
                             req.flash('error', 'UNABLE TO WRITE SIM INFORMATION TO FILE');
                             res.redirect('/display_pdn_subsc');
@@ -629,12 +636,12 @@ router.post('/add_pdn_subscription', [
             })
         }
         else {
-            
+
             res.render('pages/add_pdn_subscription', { message: 'Error! MNC+MSIN does not match the last 12 digits of the MSISDN', error: {}, input: input_data, file: mcc_mnc });
         }
     }
 });
-router.post('/edit_pdn_subs/:imsi', loginAuthentica.is_login, [
+router.post('/edit_pdn_subs/:imsi', [
     check('imsi').isLength({ min: 15, max: 15 }).withMessage('ERROR: THE LENGTH OF IMSI HAS TO BE 15').isInt().withMessage('ERROR: IMSI VALUE HAS TO BE INTEGER VALUE').trim(),
     check('msisdn').isLength({ min: 15, max: 15 }).withMessage('ERROR: THE LENGTH OF MSISDN HAS TO BE 15').isInt().withMessage('ERROR: MSISDN VALUE HAS TO BE INTEGER VALUE').trim(),
     check('apn').isAlpha().withMessage('ERROR: THE APN VALUE HAS TO BE ALPHANUMERIC VALUE'),
@@ -644,7 +651,7 @@ router.post('/edit_pdn_subs/:imsi', loginAuthentica.is_login, [
     var errors = validationResult(req);
     var countryx = fs.readFileSync(process.cwd() + "/public/mcc-mnc-table.json");
     var mcc_mnc = JSON.parse(countryx);
-
+    console.log('going well');
     var updated_data = {
         imsi: req.params.imsi,
         msisdn: req.body.msisdn,
@@ -656,7 +663,7 @@ router.post('/edit_pdn_subs/:imsi', loginAuthentica.is_login, [
 
     if (!errors.isEmpty()) {
         console.log(updated_data);
-        req.flash('error', errors.array()[0].msg);        
+        req.flash('error', errors.array()[0].msg);
         res.redirect('/display_pdn_subsc');
     }
     else {
@@ -668,18 +675,18 @@ router.post('/edit_pdn_subs/:imsi', loginAuthentica.is_login, [
         var imsi = req.params.imsi;
         var msisdn = req.body.msisdn;
         var update = "UPDATE pdn_subscription_ctx INNER JOIN subscriber_profile ON pdn_subscription_ctx.imsi = subscriber_profile.imsi SET pdn_subscription_ctx.imsi = ?,pdn_subscription_ctx.apn=?,pdn_subscription_ctx.qci=?,pdn_subscription_ctx.served_party_ipv4_addr=?, subscriber_profile.imsi= ?,subscriber_profile.msisdn= ?,subscriber_profile.k= UNHEX(?) WHERE pdn_subscription_ctx.imsi= ?";
-        
-        db.query(update, [req.body.imsi, req.body.apn, req.body.qci, req.body.served_party_ipv4_addr, req.body.imsi, req.body.msisdn, req.body.k, req.params.imsi], function (err, data, fields) {
 
-            //console.log('this is the edited data',data)
+        db.query(update, [req.body.imsi, req.body.apn, req.body.qci, req.body.served_party_ipv4_addr, req.body.imsi, req.body.msisdn, req.body.k, imsi], function (err, data, fields) {
+
+            console.log('this is the edited data', data)
             if (err) {
                 req.flash('error', 'ERROR: DUPLICATE IMSI VALUE');
                 res.redirect('/display_pdn_subsc');
-               
+
 
             }
             else {
-                
+                console.log('this is the edited data')
                 req.flash("info", "Successfully updated!");
                 res.redirect('/display_pdn_subsc');
             }
@@ -693,7 +700,7 @@ router.post('/operator', [
     check('op').isHexadecimal().withMessage('Error! The op field requires hexadecimal value!').trim().escape(),
     check('amf').isHexadecimal().withMessage('Error! The amf field requires hexadecimal value!').trim().escape(),
     check('name').isLength({ min: 1 }).withMessage('Error! The name field requires alphanumeric characters!').trim()
-], function (req, res, next) {    
+], function (req, res, next) {
     var errors = validationResult(req);
     var countryx = fs.readFileSync(process.cwd() + "/public/mcc-mnc-table.json");
     var mcc_mnc = JSON.parse(countryx);
@@ -703,7 +710,7 @@ router.post('/operator', [
         op: req.body.op,
         amf: req.body.amf,
         name: req.body.name
-    };   
+    };
     if (!errors.isEmpty()) {
         res.render('pages/operator', { message: '', error: errors.array(), file: mcc_mnc, input: operator });
     }
@@ -712,13 +719,13 @@ router.post('/operator', [
         db.query(mysql_op, function (err, op_data) {
 
             if (err) {
-                req.flash('error',err);
-               
+                req.flash('error', err);
+
                 res.render('pages/operator', { message: "DUPLICATE ENTRY(MCC,MNC)", error: {}, file: mcc_mnc, input: operator });
             }
             else {
-                
-                req.flash('info','OPERATOR SUCCESSFULLY ADDED!');
+
+                req.flash('info', 'OPERATOR SUCCESSFULLY ADDED!');
                 res.redirect('/display_operator');
             }
 
@@ -758,13 +765,13 @@ router.post('/edit_operator/(:mnc/:mcc)', [
         var operator_str = "UPDATE operators SET mcc=?,mnc=?,op=UNHEX(?),amf=UNHEX(?),name= ?  WHERE mnc = ? AND mcc= ?";
         db.query(operator_str, [req.body.mcc, req.body.mnc, req.body.op, req.body.amf, req.body.name, mnc, mcc], function (err, editop, fields) {
             if (err) {
-                req.flash('error',' Error! Duplicate entries (mcc, mnc)!');
+                req.flash('error', ' Error! Duplicate entries (mcc, mnc)!');
 
                 res.render('pages/edit_operator', { message: "DUPLICATE ENTRY(MCC,MNC)", error: {}, editoperator: editoper, file: mcc_mnc, country: country });
-              
+
             }
             else {
-                req.flash('info','SUCCESSFULLY UPDATED!');            
+                req.flash('info', 'SUCCESSFULLY UPDATED!');
                 res.redirect('/display_operator');
 
             }
@@ -772,49 +779,49 @@ router.post('/edit_operator/(:mnc/:mcc)', [
         });
     }
 });
-router.post('/postconfig',function(req,res){
-  var enbdata = {
-    ip:req.body.eNBIP,
-    name: req.body.eNBname,
-    latitude:req.body.gps_coorlat,
-    longitude:req.body.gps_coorlng,
-    coverage_area:400,
-    cell_id:req.body.cellID,
-    tracking_area_id:req.body.trackingA_ID,
-    service_id:req.body.service_ID
-  };
-  db.query("INSERT INTO enb_configuration SET ?",enbdata,function(err,enbdata,fields){
-    if(err){     
-      req.flash('error','DUPLICATE IP ENTRIES');
-      res.redirect('/mgt_dashboard');
-    }
-    else{
-        res.redirect('/mgt_dashboard');
-    }
-  });
+router.post('/postconfig', function (req, res) {
+    var enbdata = {
+        ip: req.body.eNBIP,
+        name: req.body.eNBname,
+        latitude: req.body.gps_coorlat,
+        longitude: req.body.gps_coorlng,
+        coverage_area: 400,
+        cell_id: req.body.cellID,
+        tracking_area_id: req.body.trackingA_ID,
+        service_id: req.body.service_ID
+    };
+    db.query("INSERT INTO enb_configuration SET ?", enbdata, function (err, enbdata, fields) {
+        if (err) {
+            req.flash('error', 'DUPLICATE IP ENTRIES');
+            res.redirect('/mgt_dashboard');
+        }
+        else {
+            res.redirect('/mgt_dashboard');
+        }
+    });
 });
 /* modify enb configuration */
-router.post('/modifyconfig/:id',function(req,res){
-  var id= req.params.id;
-  var modifydata = {
-    ip:req.body.eNBIP,
-    name: req.body.eNBname,
-    latitude:req.body.gps_coorlat,
-    longitude:req.body.gps_coorlng,
-    coverage_area:req.body.coverageA,
-    cell_id:req.body.cellID,
-    tracking_area_id:req.body.trackingA_ID,
-    service_id:req.body.service_ID
-  }  
- var enbconfig="UPDATE enb_configuration SET ip=?,name=?,latitude=?,longitude=?,coverage_area=?,cell_id=?,tracking_area_id=?,service_id=? WHERE ip=?";
-  db.query(enbconfig,[req.body.eNBIP,req.body.eNBname,req.body.gps_coorlat,req.body.gps_coorlng,req.body.coverageA,req.body.cellID,req.body.trackingA_ID,req.body.service_ID,id],function(err,data,fields){
-    if(err){
-   
-      res.redirect('/viewconfig');
+router.post('/modifyconfig/:id', function (req, res) {
+    var id = req.params.id;
+    var modifydata = {
+        ip: req.body.eNBIP,
+        name: req.body.eNBname,
+        latitude: req.body.gps_coorlat,
+        longitude: req.body.gps_coorlng,
+        coverage_area: req.body.coverageA,
+        cell_id: req.body.cellID,
+        tracking_area_id: req.body.trackingA_ID,
+        service_id: req.body.service_ID
     }
-    else{
-      res.redirect('/viewconfig');
-    }
-  });
+    var enbconfig = "UPDATE enb_configuration SET ip=?,name=?,latitude=?,longitude=?,coverage_area=?,cell_id=?,tracking_area_id=?,service_id=? WHERE ip=?";
+    db.query(enbconfig, [req.body.eNBIP, req.body.eNBname, req.body.gps_coorlat, req.body.gps_coorlng, req.body.coverageA, req.body.cellID, req.body.trackingA_ID, req.body.service_ID, id], function (err, data, fields) {
+        if (err) {
+
+            res.redirect('/viewconfig');
+        }
+        else {
+            res.redirect('/viewconfig');
+        }
+    });
 });
 module.exports = router;

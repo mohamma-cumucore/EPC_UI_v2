@@ -21,8 +21,10 @@
         <div class="row">
           <div class="col-md-6">
             <%if(error){%>
-            <div>              
-              <p class="alert alert-danger" role="alert"><small><%=error%></small></p>             
+            <div> 
+                <% for(err in error){ %>
+                  <p class="alert alert-danger" role="alert"><small><%=error[err].msg%></small></p>
+                <%}%>            
             </div>
                 <%}%>
               <%if(message){%>

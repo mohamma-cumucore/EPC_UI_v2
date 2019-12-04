@@ -53,19 +53,19 @@ exports.dashboard = function (req, res) {
 // post search ue by imsi
 exports.uesearch = function (req, res) {
   const id = req.body.imsi;
-  console.log('this is the id',id);
+  console.log('this is the id', id);
   db.query('SELECT pdn_subscription_ctx.*,subscriber_profile.* FROM pdn_subscription_ctx INNER JOIN subscriber_profile ON pdn_subscription_ctx.imsi = subscriber_profile.imsi WHERE subscriber_profile.imsi = ?', [id], function (err, serviceD, fields) {
     if (err) {
       //console.log('wrong imsi  number');
       res.redirect('/mgt_dashboard');
     }
     else if (serviceD.length <= 0) {
-      req.flash('error','The Subscriber is not found!');
+      req.flash('error', 'The Subscriber is not found!');
       res.redirect('/mgt_dashboard');
 
     }
     else {
-      console.log('this is the serviceD data',serviceD[0]);
+      console.log('this is the serviceD data', serviceD[0]);
       res.render('pages/api', { ue_data: serviceD[0] });
     }
   })
@@ -98,7 +98,7 @@ exports.addamf = function (req, res) {
     sm_addr_ipv4: "127.0.30.1"
   };
 
-  res.render('pages/amfadd', { message: '', error: '', amf: amf });
+  res.render('pages/amfadd', { message: '', error: {}, amf: amf });
 
 }
 /* setting default smf configuration settings to the db */
@@ -131,7 +131,7 @@ exports.smfadd = function (req, res) {
     smf_state: "0"
   }
 
-  res.render('pages/smfadd', { message: '', error: '', smf: smf });
+  res.render('pages/smfadd', { message: '', error: {}, smf: smf });
 
 }
 /* Display available amf  configurations in the db */
@@ -143,9 +143,8 @@ exports.listamf = function (req, res) {
     else {
       var amf_array = [];
       amf_array = amf_data;
-      console.log(amf_data);
-      //res.render('pages/amfdisplay',{amfd:amf_array,message:req.flash()}); 
-      res.render('pages/amfdisplay', { amfd: amf_array, message: {} });
+      //console.log(amf_data);
+      res.render('pages/amfdisplay', { amfd: amf_array, message: req.flash() });
     }
   });
 }
@@ -155,8 +154,8 @@ exports.listsmf = function (req, res) {
 
     if (err) throw err;
     var smf_array = [];
-    smf_array = smf_data;    
-    res.render('pages/smfdisplay', { smfd: smf_array, message: {} });
+    smf_array = smf_data;
+    res.render('pages/smfdisplay', { smfd: smf_array, message: req.flash() });
 
   });
 }
@@ -241,7 +240,6 @@ exports.deleteAmf = function (req, res) {
       req.flash('info', 'DATA SUCCESSFULLY DELETED!');
       res.redirect('/amfdisplay');
     }
-
 
   });
 }
@@ -332,7 +330,7 @@ exports.deleteSmf = function (req, res) {
       res.redirect('/smfdisplay');
     }
     else {
-      //req.flash('info', 'DATA SUCCESSFULLY DELETED! ');
+      req.flash('info', 'DATA SUCCESSFULLY DELETED! ');
       res.redirect('/smfdisplay');
     }
   });
@@ -391,7 +389,7 @@ exports.sessionSchedule = function (req, res) {
   request(url, function (err, response, body) {
     if (err) {
       console.log('End point(xmbapi) is not running:', err.code);
-      req.flash('error','ERROR SOMETHING WENT WRONG WITH THE API');
+      req.flash('error', 'ERROR SOMETHING WENT WRONG WITH THE API');
       res.redirect('/mgt_dashboard');
     }
 
@@ -446,13 +444,13 @@ exports.mbmsServices = function (req, res) {
   request(url, function (err, response, body) {
     if (err) {
       console.log('Error code:', err);
-      req.flash('error','ERROR CAN NOT ACCESS THE API');
+      req.flash('error', 'ERROR CAN NOT ACCESS THE API');
       res.redirect('/schedule');
     }
     else {
       if (body == "404 page not found\n") {
         console.log(err.code);
-        req.flash('error','ERROR CAN NOT ACCESS THE API');
+        //req.flash('error', 'ERROR CAN NOT ACCESS THE API');
         res.redirect('/schedule');
       }
       else {
@@ -499,7 +497,6 @@ exports.createService = function (req, res) {
 }
 /* Removing available services */
 exports.deleteService = function (req, res) {
-
   var urld = baseurl + '/xmb/v1.0/services/';
   var id = req.params.id;
   console.log('deleting service with id' + id);
@@ -584,7 +581,7 @@ exports.viewsessions = function (req, res) {
     }
     else {
       let services = JSON.parse(body);
-      console.log('service length',services);
+      console.log('service length', services);
       if (services != null && services.length > 0) {
         console.log('hello');
         for (var i = 0; i < services.length; i++) {
@@ -599,7 +596,7 @@ exports.viewsessions = function (req, res) {
 
           });
         }
-        
+
         res.render('pages/viewsessions', { data: available_ses, error: {}, ser_res_id: id });
       }
       else {
@@ -626,7 +623,6 @@ exports.deletesession = function (req, res) {
       console.log('statusCode:', response && response.statusCode);
       res.redirect('/services');
     }
-
     res.redirect('/services');
 
   });
@@ -675,7 +671,7 @@ exports.listusers = function (req, res) {
     }
     else {
       //console.log('the display data are',pdn_data);
-      res.render('pages/display_pdn_subsc', { data: pdn_data, message: {} });
+      res.render('pages/display_pdn_subsc', { data: pdn_data, message: req.flash() });
     }
 
   });
@@ -745,9 +741,7 @@ exports.listoperator = function (req, res) {
 
   db.query('SELECT * FROM operators', function (err, operator_info, fields) {
     if (err) throw err;
-    //console.log('available operators are listed below');
-    //res.render('pages/display_operator',{operator:operator_info,message:req.flash()});
-    res.render('pages/display_operator', { operator: operator_info, message: {} });
+    res.render('pages/display_operator', { operator: operator_info, message: req.flash() });
 
   });
 }
@@ -800,22 +794,14 @@ exports.deleteoperator = function (req, res) {
   db.query('DELETE operators.* FROM operators WHERE (mnc,mcc) IN (?)', [pids], function (err, data, fields) {
     if (err) {
 
-      //req.flash("error", "Not deleted!");
+      req.flash("error", "Not deleted!");
       res.redirect('/display_operator');
     }
     else {
-      db.query("DELETE auth_vec.* FROM auth_vec WHERE (auth_vec.mnc, auth_vec.mcc IN (?)", [pids], function (err, data_aut, fields) {
-        if (err) {
-          //console.log('error message',err.sqlMessage);
-          req.flash("error", "Not deleted!");
-          res.redirect('/display_operator');
-        }
-        else {
-          req.flash('info','Successfully deleted!');
-          res.redirect('/display_operator');
-        }
 
-      });
+      req.flash('info', 'SUCCESSFULLY DELETED!');
+      res.redirect('/display_operator');
+
     }
   });
 }
@@ -863,71 +849,76 @@ exports.deleteNB = function (req, res) {
 
 }
 /* Downloading a given amf configuration file to the given path */
-exports.amfconfig = function(req,res){
-  
-  var result= "SELECT * FROM amf_settings a WHERE a.name=?;SELECT * FROM five_g_amf_settings f WHERE f.name=?";
-  db.query(result,[id,id],function(err,data,fileds){
-    if(err){
+exports.amfconfig = function (req, res) {
+  var id = req.params.id;
+  var result = "SELECT * FROM amf_settings a WHERE a.name=?;SELECT * FROM five_g_amf_settings f WHERE f.name=?";
+  db.query(result, [id, id], function (err, data, fileds) {
+    if (err) {
       //console.log('ERROR',err.sqlMessage);
-      req.flash('error','NO AMF CONFIGURATIONS FOUND WITH THIS NAME.');
+      req.flash('error', 'NO AMF CONFIGURATIONS FOUND WITH THIS NAME.');
       res.redirect('/amfdisplay');
     }
-    else{
-      var ta1= data[0][0].tracking_area_list1.split(',');
+    else {
+      var ta1 = data[0][0].tracking_area_list1.split(',');
       //console.log(eval(new String("NULL")));        
-      
+
       var amf4g = {
-        "name":              data[0][0].name,
-        "s1_addr_ipv4":      data[0][0].s1_addr_ipv4,
-        "s1_addr_ipv6":      "",
-        "m3_addr_ipv4":      data[0][0].m3_addr_ipv4,
-        "m3_addr_ipv6":      "",
+        "name": data[0][0].name,
+        "s1_addr_ipv4": data[0][0].s1_addr_ipv4,
+        "s1_addr_ipv6": "",
+        "m3_addr_ipv4": data[0][0].m3_addr_ipv4,
+        "m3_addr_ipv6": "",
         "smf_s11_addr_ipv4": data[0][0].smf_s11_addr_ipv4,
         "smf_s11_addr_ipv6": "",
-        "s11_addr_ipv4":     data[0][0].s11_addr_ipv4,
-        "s11_addr_ipv6":     "",
-        "sm_addr_ipv4":      data[0][0].sm_addr_ipv4,
-        "mmec":              data[0][0].mmec,
-        "mmegi":             data[0][0].mmegi,
-        "mcc":               data[0][0].mcc,
-        "mnc":               data[0][0].mnc,
-        "s11u_addr_ipv4":    data[0][0].s11u_addr_ipv4,
-        "s10_addr_ipv4":     data[0][0].s10_addr_ipv4,
-        "mysql_host":        data[0][0].mysql_host,
-        "mysql_db_name":     data[0][0].mysql_db_name,
-        "mysql_user_name":   data[0][0].mysql_user_name,
-        "mysql_password":    data[0][0].mysql_password,
+        "s11_addr_ipv4": data[0][0].s11_addr_ipv4,
+        "s11_addr_ipv6": "",
+        "sm_addr_ipv4": data[0][0].sm_addr_ipv4,
+        "mmec": data[0][0].mmec,
+        "mmegi": data[0][0].mmegi,
+        "mcc": data[0][0].mcc,
+        "mnc": data[0][0].mnc,
+        "mnc_len": data[0][0].mnc_len,
+        "s11u_addr_ipv4": data[0][0].s11u_addr_ipv4,
+        "s10_addr_ipv4": data[0][0].s10_addr_ipv4,
+        "mysql_host": data[0][0].mysql_host,
+        "mysql_db_name": data[0][0].mysql_db_name,
+        "mysql_user_name": data[0][0].mysql_user_name,
+        "mysql_password": data[0][0].mysql_password,
         "diam_config_file_path": data[0][0].diam_config_file_path,
         "diam_hss_host_name": data[0][0].diam_hss_host_name,
-        "diam_hss_realm":     data[0][0].diam_hss_realm,
-        "auth_data_path":     data[0][0].auth_data_path,
-        "auth_srv_ip":        data[0][0].auth_srv_ip,
-        "tracking_area_list1":[parseInt(ta1[0]),null,null,null,null],
-        "tracking_area_list2":[null,null,null,null,null],
-        "tracking_area_list3":[null,null,null,null,null],
+        "diam_hss_realm": data[0][0].diam_hss_realm,
+        "auth_data_path": data[0][0].auth_data_path,
+        "auth_srv_ip": data[0][0].auth_srv_ip,
+        "tracking_area_list1": [parseInt(ta1[0]), null, null, null, null],
+        "tracking_area_list2": [null, null, null, null, null],
+        "tracking_area_list3": [null, null, null, null, null],
         "periodic_tau_timer": parseInt(data[0][0].periodic_tau_timer),
-        "s10_remote_peer":{
-          "s10_mcc":            data[0][0].s10_mcc,
-          "s10_mnc":            data[0][0].s10_mnc,
-          "s10_mmec":           data[0][0].s10_mmec,
-          "s10_mmegi":          data[0][0].s10_mmegi,
-          "s10_addr_ipv4":      data[0][0].s10_rem_addr_ipv4
+        "s10_remote_peer": {
+          "s10_mcc": data[0][0].s10_mcc,
+          "s10_mnc": data[0][0].s10_mnc,
+          "s10_mnc_len": data[0][0].s10_mnc_len,
+          "s10_mmec": data[0][0].s10_mmec,
+          "s10_mmegi": data[0][0].s10_mmegi,
+          "s10_addr_ipv4": data[0][0].s10_rem_addr_ipv4
         }
       };
-    
-      var amf4gdata = JSON.stringify(amf4g,null,2);
-      //console.log(amf4gdata);
-      var mme_json = fs.writeFileSync(path+"mme_config.json",amf4gdata);
-      var amf5gdata = JSON.stringify(data[1],null,2);
-      var amf_json = fs.writeFileSync(path+"amf_config.json",amf5gdata);
-      //var files = fs.readFileSync(process.cwd("/binaries.zip"));
 
-      req.flash('info','CONFIGURATION FILE SUCCESSFULLY DOWNLOADED AT: '+path.path);
+      var amf4gdata = JSON.stringify(amf4g, null, 2);
+      //console.log(amf4gdata);
+      var mme_json = fs.writeFileSync(path + "mme_config.json", amf4gdata);
+      var amf5gdata = JSON.stringify(data[1], null, 2);
+      var amf_json = fs.writeFileSync(path + "amf_config.json", amf5gdata);
+      //var files = fs.readFileSync(process.cwd("/binaries.zip"));
+      req.flash('info', 'CONFIGURATION FILE SUCCESSFULLY DOWNLOADED AT: ' + path);
       res.redirect('/amfdisplay');
       //res.send(amf5gdata);
-     }
-   });
+    }
+  });
 }
-exports.logout = function(req,res){
+exports.logout = function (req, res) {
   res.redirect('/');
+}
+exports.simwriter = function (req, res) {
+  var filepath = fs.readFileSync(process.cwd() + "/public/SIMscript.txt");
+  res.send(filepath);
 }

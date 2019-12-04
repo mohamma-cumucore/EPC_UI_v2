@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html>
 
-<% include ../partials/head %>
+<%- include ('../partials/head'); %>
 
 <body>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
 
   <div class="container-fluid">
 
-  <div class="row subscriber-bg">
-      <% include ../partials/editsidemenue %>
-      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5"id="mainbar">
+    <div class="row subscriber-bg">
+      <%- include ('../partials/editsidemenue') %>
+      <div class="col-md-9 float-left col px-5 pl-md-2 pt-2 ml-5" id="mainbar">
         <div class="row">
           <div class="col-md-9">
             <%if(error){%>
-            <div class="">            
-            <p class="alert alert-danger" role="alert"><small><%=error%></small></p>
-            
-          </div>
-          <%}%>
+            <div class="">
+              <p class="alert alert-danger" role="alert"><small><%=error%></small></p>
+
+            </div>
+            <%}%>
           <% if (message) { %>
-    <div class="">
-      <p class="alert alert-danger" role="alert"><small><%= message %></small></p>
-  </div>
-    <% } %>
-        <div class="topbox">EDIT SUBSCRIBER</div>
-        <%          
+            <div class="">
+              <p class="alert alert-danger" role="alert"><small><%= message %></small></p>
+            </div>
+            <% } %>
+            <div class="topbox">EDIT SUBSCRIBER</div>
+            <%          
           var k= Datasubs[0].k.toString('HEX');
           var msisdn = Datasubs[0].msisdn;
           
@@ -36,138 +42,141 @@
             Datasubs[0].served_party_ipv4_addr = 'NULL';
           }
         %>
-        <form method="POST" action="/edit_pdn_subs/<%=Datasubs[0].imsi%>">
-         
-          <div class="form-row">
-            <div class="addgap"><label for="validationDefault01">IMSI:</label></div>
-            <div class="col">
-              <input type="text" class="form-control" id="imsi" value="<%=Datasubs[0].imsi%>" name="imsi" onChange="changemsisdn();" required>
-            </div>
-          </div>         
-          <div class="form-row">
-            <div class="addgap"><label for="validationDefault01">MSISDN:</label></div>
-            <div class="col">
-              <input type="text" class="form-control" id="msisdn" value="<%=msisdn%>" name="msisdn" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="addgap"><label for="validationDefault01">APN:</label></div>
-            <div class="col">
-              <input type="text" class="form-control" id="validationDefault01" value="<%=Datasubs[0].apn%>" name="apn" required>
-            </div>
-          </div>
+            <form method="POST" action="/edit_pdn_subs/<%=Datasubs[0].imsi%>">
 
-          <div class="form-row">
-            <div class="col-2"><label for="validationDefault01">QCI:</label></div>
-            <div class="col">
-            <select class="form-control" id="validationDefault01" name="qci">              
-              <option value="9">9</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="65">65</option>
-              <option  value="66">66</option>
-              <option value="69">69</option>
-              <option value="70">70</option>
-              <option value="75">75</option>
-              <option value="79">79</option>
-            </select>
-          </div>
-          </div>
-          <div class="form-row">
-            <div class="addgap"><label for="validationDefault01">K:</label></div>
-            <div class="col">
-              <input type="text" class="form-control" id="validationDefault01" value="<%=k%>" name="k" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="col"><label for="validationDefault01">SERVED_PARTY_IPv4_ADDR:</label></div>
-            <div class="col">
-              <input type="text" class="form-control mb-2" id="validationDefault01" value="<%=Datasubs[0].served_party_ipv4_addr%>" name="served_party_ipv4_addr">
-            </div>
-          </div>
-          <div class="row">
-              <div class="btn-group btn-group-md">
-
-                <button class="btn blbutt mb-2 mr-3 mt-5" type="submit">Submit</button>
-                <a href="/display_pdn_subsc"><button type="button" class="btn delbutt mb-2 mt-5">Cancel</button></a>
-
+              <div class="form-row">
+                <div class="addgap"><label for="validationDefault01">IMSI:</label></div>
+                <div class="col">
+                  <input type="text" class="form-control" id="imsi" value="<%=Datasubs[0].imsi%>" name="imsi"
+                    onChange="changemsisdn();" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="addgap"><label for="validationDefault01">MSISDN:</label></div>
+                <div class="col">
+                  <input type="text" class="form-control" id="msisdn" value="<%=msisdn%>" name="msisdn" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="addgap"><label for="validationDefault01">APN:</label></div>
+                <div class="col">
+                  <input type="text" class="form-control" id="validationDefault01" value="<%=Datasubs[0].apn%>"
+                    name="apn" required>
+                </div>
               </div>
 
+              <div class="form-row">
+                <div class="col-2"><label for="validationDefault01">QCI:</label></div>
+                <div class="col">
+                  <select class="form-control" id="validationDefault01" name="qci">
+                    <option value="9">9</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="69">69</option>
+                    <option value="70">70</option>
+                    <option value="75">75</option>
+                    <option value="79">79</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="addgap"><label for="validationDefault01">K:</label></div>
+                <div class="col">
+                  <input type="text" class="form-control" id="validationDefault01" value="<%=k%>" name="k" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col"><label for="validationDefault01">SERVED_PARTY_IPv4_ADDR:</label></div>
+                <div class="col">
+                  <input type="text" class="form-control mb-2" id="validationDefault01"
+                    value="<%=Datasubs[0].served_party_ipv4_addr%>" name="served_party_ipv4_addr">
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-md">
+
+                  <button class="btn blbutt mb-2 mr-3 mt-5" type="submit">Submit</button>
+                  <a href="/display_pdn_subsc"><button type="button" class="btn delbutt mb-2 mt-5">Cancel</button></a>
+
+                </div>
+
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <div class="col-md-3"></div>
-      </div>
+          <div class="col-md-3"></div>
+        </div>
 
       </div>
 
-  </div>
+    </div>
   </div>
 
-<!-- <% include ../partials/footer %> -->
-<script type="text/javascript">
-var mcc_mnc = <%-JSON.stringify(file)%>;
-var message= <%-JSON.stringify(message)%>;
-// if(message=="Duplicate ENTRY(MCC,MNC,MSIN)"){
-//   document.getElementById("errmcc").style.color="#F08080";
-//   document.getElementById("errmnc").style.color="#F08080";
-//   document.getElementById("errmsin").style.color="#F08080";
-// }
-// if(message=="Error! MNC+MSIN does not match the last 12 digits of the MSISDN."){
-//   document.getElementById("errmnc").style.color="#F08080";
-//   document.getElementById("errmsin").style.color="#F08080";
-//   document.getElementById("errmsisdn").style.color="#F08080";
-// }
-// function mnc_value(){
-//   var x = document.getElementById("country").value;
-//   for (var i=0; i< mcc_mnc.length; i++){
-//     if(mcc_mnc[i].mcc == x){
-//       var cc_len = (mcc_mnc[i].country_code).length;
-//       var mnc_len = (mcc_mnc[i].mnc).length;
-//       if(cc_len ==2 && mnc_len==3){
-//         document.getElementById("mnc").value = mcc_mnc[i].mnc;
-//         document.getElementById("msisdn").value= mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
-//       }
-//       else if (cc_len ==2 && mnc_len==2) {
-//         document.getElementById("mnc").value = mcc_mnc[i].mnc;
-//         document.getElementById("msisdn").value= '0' + mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
-//       }
-//       else if(cc_len ==1 && mnc_len==3){
-//         document.getElementById("mnc").value = mcc_mnc[i].mnc;
-//         document.getElementById("msisdn").value= '0'+ mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
-//       }
-//       else if(cc_len ==1 && mnc_len==2){
-//         document.getElementById("mnc").value = mcc_mnc[i].mnc;
-//         document.getElementById("msisdn").value= '00'+mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
-//       }
-//       else{
-//         document.getElementById("mnc").value = mcc_mnc[i].mnc;
-//         document.getElementById("msisdn").value= mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
-//       }
+  <script type="text/javascript">
+    var mcc_mnc = <% -JSON.stringify(file) %>;
+    var message = <% -JSON.stringify(message) %>;
+    // if(message=="Duplicate ENTRY(MCC,MNC,MSIN)"){
+    //   document.getElementById("errmcc").style.color="#F08080";
+    //   document.getElementById("errmnc").style.color="#F08080";
+    //   document.getElementById("errmsin").style.color="#F08080";
+    // }
+    // if(message=="Error! MNC+MSIN does not match the last 12 digits of the MSISDN."){
+    //   document.getElementById("errmnc").style.color="#F08080";
+    //   document.getElementById("errmsin").style.color="#F08080";
+    //   document.getElementById("errmsisdn").style.color="#F08080";
+    // }
+    // function mnc_value(){
+    //   var x = document.getElementById("country").value;
+    //   for (var i=0; i< mcc_mnc.length; i++){
+    //     if(mcc_mnc[i].mcc == x){
+    //       var cc_len = (mcc_mnc[i].country_code).length;
+    //       var mnc_len = (mcc_mnc[i].mnc).length;
+    //       if(cc_len ==2 && mnc_len==3){
+    //         document.getElementById("mnc").value = mcc_mnc[i].mnc;
+    //         document.getElementById("msisdn").value= mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
+    //       }
+    //       else if (cc_len ==2 && mnc_len==2) {
+    //         document.getElementById("mnc").value = mcc_mnc[i].mnc;
+    //         document.getElementById("msisdn").value= '0' + mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
+    //       }
+    //       else if(cc_len ==1 && mnc_len==3){
+    //         document.getElementById("mnc").value = mcc_mnc[i].mnc;
+    //         document.getElementById("msisdn").value= '0'+ mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
+    //       }
+    //       else if(cc_len ==1 && mnc_len==2){
+    //         document.getElementById("mnc").value = mcc_mnc[i].mnc;
+    //         document.getElementById("msisdn").value= '00'+mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
+    //       }
+    //       else{
+    //         document.getElementById("mnc").value = mcc_mnc[i].mnc;
+    //         document.getElementById("msisdn").value= mcc_mnc[i].country_code + mcc_mnc[i].mnc + 1000000001;
+    //       }
 
-//     }
-//   }
+    //     }
+    //   }
 
-//   }
-  function changemsisdn(){
-    var countryCode = document.getElementById('msisdn').value;
-    var ccode = countryCode.substring(0,3);
-    var imsi = document.getElementById('imsi').value;
-    var mncmsin = imsi.substring(3);
-    console.log(mncmsin);
-    //var mnc = document.getElementById('mnc').value;
-    //var msin = document.getElementById('msin').value;
-    document.getElementById('msisdn').value= ccode+mncmsin;
-  }
+    //   }
+    function changemsisdn() {
+      var countryCode = document.getElementById('msisdn').value;
+      var ccode = countryCode.substring(0, 3);
+      var imsi = document.getElementById('imsi').value;
+      var mncmsin = imsi.substring(3);
+      console.log(mncmsin);
+      //var mnc = document.getElementById('mnc').value;
+      //var msin = document.getElementById('msin').value;
+      document.getElementById('msisdn').value = ccode + mncmsin;
+    }
 
 
-</script>
+  </script>
 
 </body>
+
 </html>
