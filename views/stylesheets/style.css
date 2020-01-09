@@ -177,8 +177,10 @@ div{
 }
 .mgt_zone {
   text-align:left;
-  font-family: lobster;
-  margin:150px 500px ;
+  font-family: lobster; 
+  display: flex;
+  justify-content: center; 
+  margin-top: 15%;
 }
 .mgtcardtext{
   color:  #00A8E1;
@@ -329,6 +331,11 @@ footer{
 }
 .delbutt{
   width: 90px;
+  background-color: #949599;
+  color:white;
+}
+.simbutt{
+  width: 105px;
   background-color: #949599;
   color:white;
 }

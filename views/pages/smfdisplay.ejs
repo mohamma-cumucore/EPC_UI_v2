@@ -50,11 +50,11 @@
               <td><%=smfd[i].iot_upf_s5_addr_ipv4%></td>
               <%if(smfd[i].smf_state==0){%>
                 <td>
-                  <a href="/startsmf/<%= id %>"><button type="button" class="btn btn-primary">start</button></a></td>
+                  <a href="/startsmf"><button type="button" class="btn btn-primary">start</button></a></td>
 
               <%} else{%>
                 <td>
-        <a href="/startsmf/<%= id %>"<button type="button" class="btn btn-danger">stop</button></a></td>
+        <a href="/startsmf"<button type="button" class="btn btn-success">Running</button></a></td>
 
             <%  }%>
 

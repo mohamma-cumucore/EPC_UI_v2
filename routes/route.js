@@ -24,10 +24,10 @@ router.get('/amfadd', controller.addamf);
 router.get('/smfadd', controller.smfadd);
 router.get('/amfdisplay', controller.listamf);
 router.get('/smfdisplay', controller.listsmf);
-router.get('/startamf/(:id)', controller.amfStart);
+router.get('/startamf', controller.amfStart);
 router.get('/edit_amf/(:id)', controller.editAmf);
 router.get('/del_amf/(:id)', controller.deleteAmf);
-router.get('/startsmf/(:id)', controller.smfStart);
+router.get('/startsmf', controller.smfStart);
 router.get('/edit_smf/(:id)', controller.editSmf);
 router.get('/del_smf/(:id)', controller.deleteSmf);
 router.get('/amfbinary', controller.core);
@@ -53,7 +53,7 @@ router.get('/viewconfig', controller.listeNB);
 router.get('/modifyconfig/:id', controller.modifyeNB);
 router.get('/deleteconfig/:id', controller.deleteNB);
 router.get('/downloadconfig/(:id)', controller.amfconfig);
-router.get('/SIMscript', controller.simwriter);
+router.get('/SIMscript/(:id)', controller.simwriter);
 
 /* adding values to the db */
 router.post('/amfadd', [
@@ -620,16 +620,10 @@ router.post('/add_pdn_subscription', [
                     res.render('pages/add_pdn_subscription', { message: "Duplicate ENTRY(MCC,MNC,MSIN)", error: {}, input: input_data, file: mcc_mnc });
                 }
                 else {
-                    var simwriter = fs.appendFile(process.cwd() + "/public/SIMscript.txt", "1234 88888888 1234 88888888 0102030405060708 894900150624013455 " + "" + parseFloat(mcc + mnc + msin) + " 0004 " + Number(msisdn) + " " + req.body.k + " NULL", (error) => {
-                        if (error) {
-                            req.flash('error', 'UNABLE TO WRITE SIM INFORMATION TO FILE');
-                            res.redirect('/display_pdn_subsc');
-                        }
-                        else {
-                            req.flash('info', 'USER SUCCESSFULLY SAVED!');
-                            res.redirect('/display_pdn_subsc');
-                        }
-                    });
+
+                    req.flash('info', 'USER SUCCESSFULLY SAVED!');
+                    res.redirect('/display_pdn_subsc');
+
 
                 }
 

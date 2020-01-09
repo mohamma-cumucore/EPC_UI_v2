@@ -60,11 +60,8 @@
                 <a id="editlink"><button type="button" class="btn mt-5 mr-2 ml-5 blbutt" onclick="selected_value();">Edit</button></a>
                 <!-- <input type="button" class="btn mt-5 mr-2 ml-5 blbutt" value="Edit" onclick="windows.location.href='/edit_pdn_subs/selected_value()'"/> -->
                 <a id="delink"><button type="button" class="btn mt-5 delbutt" onclick="selected_value();">Delete</button></a>
-                <button class="btn mt-5 delbuttDown dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-download" aria-hidden="true"></i> Download </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/SIMscript" download>SIM Script</a>
-                      </div>
+                <a id="simlink"><button type="button" class="btn mt-5 simbutt" onclick="selected_value();"><i class="fa fa-download" aria-hidden="true"></i>SIMscript</button></a>
+                
                 </div>
                 </div>
               </div>
@@ -72,6 +69,7 @@
               <script type="text/javascript">
               function selected_value(){
                 var httpdel = "/delpdn_subs/";
+                var siminfo= "/SIMscript/";
                 var table= document.getElementById("table1").tBodies[0];
                 var rowcount = table.rows.length;
                 console.log(rowcount);
@@ -83,11 +81,12 @@
                     // var mnc = document.getElementById("table1").rows[i+1].cells[2].innerHTML;
                     // var msin = document.getElementById("table1").rows[i+1].cells[3].innerHTML;
                     var http = "/edit_pdn_subs/"+imsi;
-                    var httpdel=httpdel+imsi+',';                    
-                    console.log(httpdel);
+                    var httpdel=httpdel+imsi+','; 
+                    var siminfo = siminfo+imsi+',';                   
+                    console.log(siminfo);
                     document.getElementById("editlink").setAttribute("href",http);
                     document.getElementById("delink").setAttribute("href",httpdel);
-                    //document.getElementById("jsonconfig").setAttribute("href",httsim);
+                    document.getElementById("simlink").setAttribute("href",siminfo);
                   }
                 }
 

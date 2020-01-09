@@ -4,6 +4,7 @@ const flash = require('connect-flash');
 const connection = require('../config/db_config');
 const db = connection.getConnection();
 const request = require('request');
+var exec = require('child_process').execFile;
 var moment = require('moment');
 var jscontent = fs.readFileSync(process.cwd() + "/public/settings.json");
 var jsonContent = JSON.parse(jscontent);
@@ -162,56 +163,23 @@ exports.listsmf = function (req, res) {
 /* starting the amf service */
 exports.amfStart = function (req, res) {
 
-  var id = req.params.id;
-  //console.log('value after  button clicked',id);
-  var contents = fs.readFileSync("./public/config_db.json");
-  var jsonContent = JSON.parse(contents);
+  var file = path + "core";
+  var child = exec(file, [path],
+    function (error, stdout, stderr) {
+      if (error) {
+        console.log('error', stderr);
+        req.flash("error", "ERROR! UNABLE TO START THE AMF");
+        res.redirect('/amfdisplay');
+      }
 
-  db.query('SELECT * FROM amf_settings WHERE name=?', [id], function (err, amfdata, fields) {
-    if (err) throw err;
-    if (amfdata <= 0) {
+      //console.log('success'+stdout);
+      req.flash("info", "AMF IS STARTING ...Refresh the page");
       res.redirect('/amfdisplay');
-    }
-    else {
-      var amf_data = JSON.stringify(amfdata[0], null, 2);
-      var json_content = JSON.stringify(jsonContent, null, 2);
-      var json_obj = amf_data.concat(json_content);
-
-      if (amfdata[0].amf_state == 0) {
-
-        amfdata[0].amf_state = 2;
-        //execute the binary file of the eps_pdn_subscr
-        //         var child = exec('/home/mohamma/AMF/BIN/amf json_obj',
-        //         function (error, stdout, stderr) {
-        //
-        //           if (error !== null) {
-        //             console.log('exec error:', error);
-        //     }
-        // });
-        //End of executing
 
 
-      }
-      else if (amfdata[0].amf_state == 1) {
-        amfdata[0].amf_state = 0;
 
-      }
-      else {
-        amfdata[0].amf_state = 0;
-      }
+    });
 
-      db.query('UPDATE amf_settings set amf_state = ? WHERE name = ?', [amfdata[0].amf_state, req.params.id], function (err, amfdata, fields) {
-
-        if (err) throw err;
-        else {
-          //console.log('successfully saved');
-          res.redirect('/amfdisplay');
-        }
-      });
-
-    }
-
-  })
 }
 /* Edit available amf configurations in the db */
 exports.editAmf = function (req, res) {
@@ -245,66 +213,23 @@ exports.deleteAmf = function (req, res) {
 }
 /* start smf  */
 exports.smfStart = function (req, res) {
-  var id = req.params.id;
-  db.query('SELECT * FROM smf_settings WHERE name = ?', [id], function (err, rowdata, fields) {
-    if (err) {
-      //console.log('Error',err.sqlMessage);
-      res.redirect('/smfdisplay');
-    }
-    else {
-      if (rowdata <= 0) {
+  var file = path + "smf_mbms";
+  var config = path + "smf_config.json";
+  var child = exec(file, [config],
+    function (error, stdout, stderr) {
+      if (error) {
+        console.log('error', stderr);
+        req.flash("error", "ERROR! UNABLE TO START THE SMF");
         res.redirect('/smfdisplay');
       }
-      else {
-        //console.log('the state before change is',rowdata[0].smf_state);
-        if (rowdata[0].smf_state == 0) {
-          rowdata[0].smf_state = 1;
-        }
-        else {
-          rowdata[0].smf_state = 0;
-        }
-        //console.log('the state after change is',rowdata[0].smf_state);
-        var tempsmf = {
-          name: rowdata[0].name,
-          s11_addr_ipv4: rowdata[0].s11_addr_ipv4,
-          s11_addr_ipv6: rowdata[0].s11_addr_ipv6,
-          amf_s11_addr_ipv4: rowdata[0].amf_s11_addr_ipv4,
-          amf_s11_addr_ipv6: rowdata[0].amf_s11_addr_ipv6,
-          upf_s5_addr_ipv4: rowdata[0].upf_s5_addr_ipv4,
-          upf_s5_port: rowdata[0].upf_s5_port,
-          s5_addr_ipv4: rowdata[0].s5_addr_ipv4,
-          s5_port: rowdata[0].s5_port,
-          s1u_uplink_addr_ipv4: rowdata[0].s1u_uplink_addr_ipv4,
-          sgmb_addr_ipv4: rowdata[0].sgmb_addr_ipv4,
-          sgmb_port: rowdata[0].sgmb_port,
-          amf_sm_addr_ipv4: rowdata[0].amf_sm_addr_ipv4,
-          ue_addr_ipv4_pool_start: rowdata[0].ue_addr_ipv4_pool_start,
-          dns_addr_ipv4: rowdata[0].dns_addr_ipv4,
-          iot_upf_user_plane_addr_ipv4: rowdata[0].iot_upf_user_plane_addr_ipv4,
-          iot_upf_s5_addr_ipv4: rowdata[0].iot_upf_s5_addr_ipv4,
-          iot_upf_s5_port: rowdata[0].iot_upf_s5_port,
-          iot_upf_apn: rowdata[0].iot_upf_apn,
-          mysql_host: rowdata[0].mysql_host,
-          mysql_db_name: rowdata[0].mysql_db_name,
-          mysql_user_name: rowdata[0].mysql_user_name,
-          mysql_password: rowdata[0].mysql_password,
-          smf_state: rowdata[0].smf_state,
 
-        }
-        db.query('UPDATE smf_settings set ? WHERE name = ?', [tempsmf, req.params.id], function (err, smfdata, fields) {
+      //console.log('success'+stdout);
+      req.flash("info", "SMF IS STARTING ...Refresh the page");
+      res.redirect('/smfdisplay');
 
-          if (err) {
-            //console.log('Failed to update',err);
-            res.redirect('/smfdisplay');
-          }
-          else {
-            //console.log('successfully saved');
-            res.redirect('/smfdisplay');
-          }
-        });
-      }
-    }
-  });
+
+    });
+
 }
 exports.editSmf = function (req, res) {
   var id = req.params.id;
@@ -639,7 +564,7 @@ exports.smfconfig = function (req, res) {
     else {
       //console.log('Configuration file successfully saved');
       var smfdata = JSON.stringify(result[0], null, 2);
-      console.log(smfdata);
+      //console.log(smfdata);
       var saveconfig = fs.writeFileSync(path + "smf_config.json", smfdata);
       req.flash("info", "CONFIGURATION FILE SUCCESSFULLY SAVED! " + path + "smf_config.json");
       res.redirect('/smfdisplay');
@@ -859,52 +784,23 @@ exports.amfconfig = function (req, res) {
       res.redirect('/amfdisplay');
     }
     else {
+      var trackingA1 = [];
+      var trackingA2 = [];
       var ta1 = data[0][0].tracking_area_list1.split(',');
-      //console.log(eval(new String("NULL")));        
-
-      var amf4g = {
-        "name": data[0][0].name,
-        "s1_addr_ipv4": data[0][0].s1_addr_ipv4,
-        "s1_addr_ipv6": "",
-        "m3_addr_ipv4": data[0][0].m3_addr_ipv4,
-        "m3_addr_ipv6": "",
-        "smf_s11_addr_ipv4": data[0][0].smf_s11_addr_ipv4,
-        "smf_s11_addr_ipv6": "",
-        "s11_addr_ipv4": data[0][0].s11_addr_ipv4,
-        "s11_addr_ipv6": "",
-        "sm_addr_ipv4": data[0][0].sm_addr_ipv4,
-        "mmec": data[0][0].mmec,
-        "mmegi": data[0][0].mmegi,
-        "mcc": data[0][0].mcc,
-        "mnc": data[0][0].mnc,
-        "mnc_len": data[0][0].mnc_len,
-        "s11u_addr_ipv4": data[0][0].s11u_addr_ipv4,
-        "s10_addr_ipv4": data[0][0].s10_addr_ipv4,
-        "mysql_host": data[0][0].mysql_host,
-        "mysql_db_name": data[0][0].mysql_db_name,
-        "mysql_user_name": data[0][0].mysql_user_name,
-        "mysql_password": data[0][0].mysql_password,
-        "diam_config_file_path": data[0][0].diam_config_file_path,
-        "diam_hss_host_name": data[0][0].diam_hss_host_name,
-        "diam_hss_realm": data[0][0].diam_hss_realm,
-        "auth_data_path": data[0][0].auth_data_path,
-        "auth_srv_ip": data[0][0].auth_srv_ip,
-        "tracking_area_list1": [parseInt(ta1[0]), null, null, null, null],
-        "tracking_area_list2": [null, null, null, null, null],
-        "tracking_area_list3": [null, null, null, null, null],
-        "periodic_tau_timer": parseInt(data[0][0].periodic_tau_timer),
-        "s10_remote_peer": {
-          "s10_mcc": data[0][0].s10_mcc,
-          "s10_mnc": data[0][0].s10_mnc,
-          "s10_mnc_len": data[0][0].s10_mnc_len,
-          "s10_mmec": data[0][0].s10_mmec,
-          "s10_mmegi": data[0][0].s10_mmegi,
-          "s10_addr_ipv4": data[0][0].s10_rem_addr_ipv4
-        }
-      };
-
-      var amf4gdata = JSON.stringify(amf4g, null, 2);
-      //console.log(amf4gdata);
+      trackingA1.push(parseInt(ta1[0]));
+      data[0][0].tracking_area_list1=trackingA1;
+      data[0][0].tracking_area_list2=trackingA2;
+      data[0][0].tracking_area_list3=trackingA2;
+      var mnc_val = data[0][0].mnc;
+      var mnc_s10_val= data[0][0].s10_mnc;      
+      if(mnc_val.toString().length==1){
+        //console.log('the amf length is 1');
+        data[0][0].mnc= "0"+mnc_val;
+        data[0][0].s10_mnc= "0"+mnc_s10_val;
+        data[1][0].mnc = "0"+mnc_val;
+      }
+      var amf4gdata = JSON.stringify(data[0]);
+      //console.log(data[0]);
       var mme_json = fs.writeFileSync(path + "mme_config.json", amf4gdata);
       var amf5gdata = JSON.stringify(data[1], null, 2);
       var amf_json = fs.writeFileSync(path + "amf_config.json", amf5gdata);
@@ -919,6 +815,31 @@ exports.logout = function (req, res) {
   res.redirect('/');
 }
 exports.simwriter = function (req, res) {
-  var filepath = fs.readFileSync(process.cwd() + "/public/SIMscript.txt");
-  res.send(filepath);
+  var id = req.params.id;
+  var imsi = id.split(',');
+  db.query("SELECT * from subscriber_profile WHERE imsi IN (?)",[imsi],function(err,data){
+    if(err){
+      console.log("unable to retrive data from the db");
+    }
+    else{
+      var simdata = "PIN1 PUK1 PIN2 PUK2 ADM ICCID IMSI ACC MSISDN KI OPC \n";
+      for(var i=0; i< data.length; i++){
+        simdata = simdata +  "1234 88888888 1234 88888888 0102030405060708 894900150624013455 " + "" + parseFloat(data[i].imsi) + " 0004 " + Number(data[i].msisdn) + " " + data[i].k.toString('HEX') + " NULL" +"\n";
+      }
+      var simwriter = fs.writeFile(process.cwd() + "/public/SIMscript.txt",simdata, (error) => {
+        if (error) {
+            req.flash('error', 'UNABLE TO WRITE SIM INFORMATION TO FILE');
+            res.redirect('/display_pdn_subsc');
+        }
+        else {
+            //req.flash('info', 'USER SUCCESSFULLY SAVED!');
+            //res.redirect('/display_pdn_subsc');
+            var filepath = fs.readFileSync(process.cwd() + "/public/SIMscript.txt");
+            res.send(filepath);
+        }
+    });     
+    }
+
+  });  
+  
 }

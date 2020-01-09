@@ -52,17 +52,17 @@
 
               <%if(amfd[i].amf_state==0){%>
                 <td>
-        <a href="/startamf/<%= id %>"><button type="button" class="btn btn-primary">start</button></a></td>
+        <a href="/startamf"><button type="button" class="btn btn-primary">start</button></a></td>
 
 
 
               <%} else if(amfd[i].amf_state==1){%>
                 <td>
-        <a href="/startamf/<%=id%>"<button type="button" class="btn btn-danger">stop</button></a></td>
+        <a href="/startamf"<button type="button" class="btn btn-danger">stop</button></a></td>
 
             <%  } else {%>
               <td>
-      <a href="/startamf/<%= id %>"<button type="button" class="btn btn-success">running</button></a></td>
+      <a href="/startamf"<button type="button" class="btn btn-success">running</button></a></td>
             <%}%>
             </tr>
 

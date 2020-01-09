@@ -53,7 +53,8 @@
                       ];
       var features = [];
       var uefeatures = [];
-      var centers = [];
+      var centers = []; 
+      var ueimsi=[];     
       var uecounter =0;
       var enbcounter=0;
       if(enbconfig.length<=0 ){
@@ -85,15 +86,16 @@
 
               }))
               if(users.length <=0){
-                console.log('users length',users.length);
+                //console.log('users length',users.length);
                 uefeatures=[]
               }
               else{
                 for(var x=0;x< users.length; x++ ){
-
-                    var coordinates = [(enbconfig[0].longitude+0.0005*Math.floor(Math.random() * 10)),(enbconfig[0].latitude-0.0005*Math.floor(Math.random() * 10))];
+                    uecor =[(enbconfig[0].longitude+0.0005*Math.floor(Math.random() * 10)),(enbconfig[0].latitude-0.0005*Math.floor(Math.random() * 10))];
+                    //var coordinates = [(enbconfig[0].longitude+0.0005*Math.floor(Math.random() * 10)),(enbconfig[0].latitude-0.0005*Math.floor(Math.random() * 10))];
+                    ueimsi.push(users[x].imsi);
                     uefeatures.push(new ol.Feature({
-                      geometry:new ol.geom.Point(ol.proj.fromLonLat(coordinates)),
+                      geometry:new ol.geom.Point(ol.proj.fromLonLat(uecor)),
                       name:users[x].imsi
                     }));
                     if(users[x].enb_name ==list[y].enb_name && users[x].active_idle==1){
@@ -160,7 +162,7 @@
         }
       }
 
-      console.log(uefeatures);
+      //console.log(uefeatures);
       for(var z=0; z<uefeatures.length; z++){
         features.push(uefeatures[z]);
       }
@@ -170,6 +172,7 @@
         autoPan:true
       });
       var ueelement = document.getElementById('info');
+      var uecontent = document.getElementById('ueip-content');      
       var ueippopup = new ol.Overlay({
         element:ueelement,
         positioning: 'bottom-center',
@@ -200,7 +203,7 @@
                         return pixel;
                     }
               });
-    console.log(features.length);
+    //console.log(features.length);
     var mapLayer = new ol.layer.Image({
                   source: rasterSource
               });
@@ -225,25 +228,53 @@
           });
 
     //display the ue ip on mouse hover
+  
+    map.on('pointermove',function(evt){
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+            function(feature){
+              return feature;
+            });
+          if(feature){
+            var coordinates = feature.getGeometry().getCoordinates();  
+            console.log(ol.proj.fromLonLat(coordinates));
+            ueippopup.setPosition(coordinates);
 
-    map.on('pointermove', function(evt) {
-              var feature = map.forEachFeatureAtPixel(evt.pixel,
-                function(feature) {
-                  return feature;
-                });
-              if (feature) {
-                var coordinates = feature.getGeometry().getCoordinates();
-                ueippopup.setPosition(coordinates);
                 $(ueelement).popover({
                   placement: 'top',
                   html: true,
-                  content: feature.get('name')
+                  content: 'User Equipment'
                 });
                 $(ueelement).popover('show');
-              } else {
-                $(ueelement).popover('destroy');
-              }
-            });
+               } 
+          
+    });
+    // map.on('pointermove', function(evt) {
+              
+    //           var feature = map.forEachFeatureAtPixel(evt.pixel,
+    //             function(feature) {
+    //               return feature;
+    //             });              
+                
+    //           if (feature) {   
+    //             //var ind = Math.floor(Math.random()*users.length);             
+    //             var coordinates = feature.getGeometry().getCoordinates();                
+    //             const parkAttractionsLabels = ["Spinning wheel",'Roller Coaster', 'Circular Ride', 'Family Rides',
+    //                                 'Transportation Rides', 'Water rides','Dark rides','Kiddie Rides', 'Swing Ride','Restaurant'];
+    //             var x= Math.floor(Math.random()*10);     
+      
+    //              ueippopup.setPosition(coordinates);
+
+    //             $(ueelement).popover({
+    //               placement: 'top',
+    //               html: true,
+    //               content: ''+parkAttractionsLabels[x]
+    //             });
+    //             $(ueelement).popover('show');
+    //            } 
+    //           //else {
+    //           //   $(ueelement).popover('destroy');
+    //           // }
+    //         });
       //Adding new enb configurations
 
       map.on('click', function(evt) {
